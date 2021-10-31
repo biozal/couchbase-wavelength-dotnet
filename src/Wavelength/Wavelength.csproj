@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.2.0" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2196" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Xamarin.Forms.Visual.Material" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Converters" />
+  </ItemGroup>
+</Project>

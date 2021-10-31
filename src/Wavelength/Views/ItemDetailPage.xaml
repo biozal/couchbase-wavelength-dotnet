@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="Wavelength.Views.ItemDetailPage"
+             Title="{Binding Title}"
+             BackgroundColor="{StaticResource PageBackgroundColor}"
+             Visual="Material">
+
+    <StackLayout Spacing="20" Padding="15">
+        <Label 
+            TextColor="{StaticResource PageTextColor}"
+            Text="{Binding Text}" 
+            Style="{DynamicResource TitleStyle}" 
+            FontSize="Large"/>
+        
+        <Image Aspect="AspectFit" HeightRequest="160">
+            <Image.Source>
+                <UriImageSource Uri="{Binding ImageUrl}" CacheValidity="14" CachingEnabled="true"></UriImageSource>   
+            </Image.Source>
+        </Image>   
+
+        <Label Text="{Binding DisplayStartTime}" 
+               LineBreakMode="NoWrap"
+               Style="{DynamicResource CaptionStyle}"
+               TextColor="{StaticResource PageTextColor}"
+               FontSize="Medium" />
+        <Label Text="{Binding DisplayStopTime}" 
+               LineBreakMode="NoWrap"
+               Style="{DynamicResource CaptionStyle}"
+               TextColor="{StaticResource PageTextColor}"
+               FontSize="Medium" />
+    </StackLayout>
+    
+</ContentPage>
