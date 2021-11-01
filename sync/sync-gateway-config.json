@@ -1,11 +1,6 @@
 {
-	"bootstrap": {
-	  "server": "couchbases://localhost", 
-	  "username": "syncgateway", 
-	  "password": "password", 
-	  "server_tls_skip_verify": true, 
-	  "use_tls_server": true 
-	},
+	"interface":":4984",
+	"log": ["*"],
 	"logging": { 
 	  "console": {
 		"enabled": true,
@@ -32,5 +27,19 @@
 	  "debug": {
 		"enabled": false
 	  }
+	},
+	"databases": {
+		"wavelength": {
+		  "import_docs": true,
+		  "bucket":"wavelength",
+		  "server": "http://cb-server:8091",
+		  "enable_shared_bucket_access":true,
+		  "delta_sync": {
+			"enabled":false
+		  },
+		   "num_index_replicas":0,
+		  "username": "syncgateway",
+		  "password": "password"
+		}
 	}
   }
