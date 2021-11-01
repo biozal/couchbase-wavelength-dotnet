@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.2.0" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2196" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2196" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Xamarin.Forms.Visual.Material" />
+    <None Remove="Constants\" />
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="Repository\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Converters" />
+    <Folder Include="Constants\" />
+    <Folder Include="Repository\" />
+  </ItemGroup>
+</Project>

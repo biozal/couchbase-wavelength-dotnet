@@ -1,0 +1,36 @@
+{
+	"bootstrap": {
+	  "server": "couchbases://localhost", 
+	  "username": "syncgateway", 
+	  "password": "password", 
+	  "server_tls_skip_verify": true, 
+	  "use_tls_server": true 
+	},
+	"logging": { 
+	  "console": {
+		"enabled": true,
+		"log_level": "debug",
+		"log_keys": ["*"]
+	  },
+	  "error": {
+		"enabled": true,
+		"rotation": {
+		  "max_size": 20,
+		  "max_age": 180
+		}
+	  },
+	  "warn": {
+		"enabled": true,
+		"rotation": {
+		  "max_size": 20,
+		  "max_age": 90
+		}
+	  },
+	  "info": {
+		"enabled": false
+	  },
+	  "debug": {
+		"enabled": false
+	  }
+	}
+  }
