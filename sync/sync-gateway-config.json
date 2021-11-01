@@ -39,7 +39,10 @@
 		  },
 		   "num_index_replicas":0,
 		  "username": "syncgateway",
-		  "password": "password"
+		  "password": "password",
+		  "users": {
+			"demo":  { "password": "password" }
+		  }
 		}
 	}
   }
