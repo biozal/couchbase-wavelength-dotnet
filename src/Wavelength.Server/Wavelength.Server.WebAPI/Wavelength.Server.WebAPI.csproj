@@ -33,6 +33,7 @@
     <None Remove="Repositories\" />
     <None Remove="Providers\" />
     <None Remove="Couchbase.Lite.Enterprise" />
+    <None Remove="Features\Bid\CreateBidCommand\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\" />
@@ -43,6 +44,7 @@
     <Folder Include="Constants\" />
     <Folder Include="Repositories\" />
     <Folder Include="Providers\" />
+    <Folder Include="Features\Bid\CreateBidCommand\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="9.0.0" />
