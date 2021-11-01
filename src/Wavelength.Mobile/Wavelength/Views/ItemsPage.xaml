@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:local="clr-namespace:Wavelength.ViewModels"  
+             xmlns:model="clr-namespace:Wavelength.Models"  
+             x:Class="Wavelength.Views.ItemsPage"
+             x:Name="BrowseItemsPage"
+             Title="{Binding Title}"
+	         BackgroundColor="{StaticResource PageBackgroundColor}"
+             Visual="Material">
+<ContentPage.Resources>
+    <ResourceDictionary>
+        <xct:DateTimeOffsetConverter x:Key="DateTimeOffsetConverter" />
+    </ResourceDictionary>   
+</ContentPage.Resources>
+
+    <!-- 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding AddItemCommand}" />
+    </ContentPage.ToolbarItems>
+    -->
+
+    <!--
+      x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
+      https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
+    -->
+    <RefreshView 
+	    x:DataType="local:ItemsViewModel" 
+	    Command="{Binding LoadItemsCommand}" 
+	    IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+
+        <CollectionView x:Name="ItemsListView"
+                ItemsSource="{Binding Items}"
+                SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+		        <Frame 
+                    BackgroundColor="{StaticResource PageBackgroundColor}"
+		            HasShadow="false"
+		            Padding="20, 20">
+		            <Frame 
+			            Padding="5, 10"
+			            BackgroundColor="Black"
+			            CornerRadius="18"
+			            HasShadow="false"
+                        HeightRequest="250">
+                    <StackLayout Padding="10" x:DataType="model:AuctionItem">
+                        <Label Text="{Binding Id}" 
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemDetailTextStyle}"
+			                TextColor="{StaticResource PageTextColor}"
+                            FontSize="13" />
+                        <Label Text="{Binding Title}" 
+                            LineBreakMode="NoWrap" 
+                            Style="{DynamicResource TitleStyle}" 
+			                TextColor="{StaticResource PageTextColor}"
+                            FontSize="16" />
+                        <Image Aspect="AspectFit" HeightRequest="160">
+                            <Image.Source>
+                                <UriImageSource Uri="{Binding ImageUrl}" CacheValidity="14" CachingEnabled="true"></UriImageSource>   
+                            </Image.Source>
+                        </Image>   
+                        <StackLayout 
+                            Margin="0, 5, 0, 25"
+                            Orientation="Horizontal">
+                            <Label 
+                                Padding="0, 0, 2, 0"
+                                LineBreakMode="NoWrap" 
+                                Text="Starts: "
+                                Style="{DynamicResource CaptionStyle}" 
+			                    TextColor="{StaticResource PageTextColor}"
+                                FontSize="16" />
+                            <Label 
+                                Text="{Binding StartTime, Converter={StaticResource DateTimeOffsetConverter}}" 
+                                LineBreakMode="NoWrap" 
+                                Style="{DynamicResource CaptionStyle}" 
+			                    TextColor="{StaticResource PageTextColor}"
+                                FontSize="16" />
+                            
+                        </StackLayout>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=ItemTapped}"		
+                                CommandParameter="{Binding .}">
+                            </TapGestureRecognizer>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+			    </Frame>
+		    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </RefreshView>
+</ContentPage>
