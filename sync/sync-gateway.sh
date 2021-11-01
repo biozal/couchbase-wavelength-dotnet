@@ -1,8 +1,8 @@
 #!/bin/bash
-echo "stopping sync-gateway  ..."
-docker stop sync-gateway-3-beta02
-echo "deleting sync-gateway  ..."
-docker rm sync-gateway-3-beta02
-echo "Running sync-gateway 3.0-beta02..."
-docker run -p 4984-4985:4984-4985 --network demo --name sync-gateway-3-beta02 -d -v `pwd`/sync-gateway-config.json:/etc/sync_gateway/sync_gateway.json couchbase/sync-gateway:3.0.0-beta02-enterprise -adminInterface :4985 /etc/sync_gateway/sync_gateway.json
+echo "stopping sync-gateway wavelength..."
+docker stop sync-gateway-wavelength
+echo "deleting sync-gateway wavelength..."
+docker rm sync-gateway-wavelength
+echo "Running sync-gateway wavelength.."
+docker run -p 4984-4985:4984-4985 --network demo --name sync-gateway-wavelength -d -v `pwd`/sync-gateway-config.json:/etc/sync_gateway/sync_gateway.json couchbase/sync-gateway:sync-gateway:2.8.2-enterprise -adminInterface :4985 /etc/sync_gateway/sync_gateway.json
 
