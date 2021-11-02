@@ -43,6 +43,11 @@
 		  "users": {
 			"demo":  { "password": "password" }
 		  }
-		}
+		},
+		"sync":  `
+      		function sync(doc, oldDoc) {
+				channel('!'); 
+			}
+		`
 	}
   }
