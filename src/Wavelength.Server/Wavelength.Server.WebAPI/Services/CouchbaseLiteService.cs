@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Couchbase.Lite;
+using Couchbase.Lite.Query;
 using Couchbase.Lite.Sync;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -47,6 +48,9 @@ namespace Wavelength.Server.WebAPI.Services
                 var databaseName = _couchbaseConfig?.DatabaseName;
                 _db = new Database(databaseName, new DatabaseConfiguration { Directory = fullPath });
 
+                //create indexex 
+                CreateIndexes();
+
                 //start replication
                 InitReplication();
             }
@@ -55,6 +59,24 @@ namespace Wavelength.Server.WebAPI.Services
                 _logger.LogError(ex.Message, ex.StackTrace);
 	        }
 
+	    }
+
+        private void CreateIndexes()
+        { 
+            if (_db is not null) 
+	        {
+                var indexes = _db.GetIndexes();
+                if (!indexes.Contains(Constants.Indexes.DocumentTypeName)) 
+		        {
+                    var documentTypeIndex = IndexBuilder.ValueIndex(
+                    ValueIndexItem.Expression(Expression.Property(Constants.Indexes.DocumentTypeProperty)));
+                    _db.CreateIndex(Constants.Indexes.DocumentTypeName, documentTypeIndex);
+
+                    var isActiveIndex = IndexBuilder.ValueIndex(
+                    ValueIndexItem.Expression(Expression.Property(Constants.Indexes.IsActiveProperty)));
+                    _db.CreateIndex(Constants.Indexes.IsActiveName, isActiveIndex);
+		        }
+	        }
 	    }
 
         private void InitReplication() 
