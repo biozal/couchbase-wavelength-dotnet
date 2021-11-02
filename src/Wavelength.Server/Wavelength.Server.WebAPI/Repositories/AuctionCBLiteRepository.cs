@@ -38,7 +38,8 @@ namespace Wavelength.Server.WebAPI.Repositories
                     stopWatch.Start();
                     foreach (var result in query.Execute())
                     {
-                        var json = result.ToJSON();
+                        var json = JsonConvert.SerializeObject(result);
+                        json = json.Replace("auctions", "item");
                         var dto = JsonConvert.DeserializeObject<CBLiteAuctionItemDTO>(json);
                         if (dto.Item is not null)
                         {

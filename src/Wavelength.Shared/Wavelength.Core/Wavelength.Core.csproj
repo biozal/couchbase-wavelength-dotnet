@@ -6,6 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\**" />
+    <EmbeddedResource Remove="Repositories\**" />
+    <None Remove="Repositories\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="DomainObjects\" />
     <None Remove="DataAccessObjects\" />
     <None Remove="Models\" />
@@ -17,7 +23,6 @@
     <Folder Include="DomainObjects\" />
     <Folder Include="DataAccessObjects\" />
     <Folder Include="Models\" />
-    <Folder Include="Repositories\" />
     <Folder Include="Exceptions\" />
     <Folder Include="DTO\" />
   </ItemGroup>
