@@ -42,6 +42,7 @@ namespace Wavelength.Server.WebAPI.Repositories
                             items.Add(dto.Item);
                         }
 		            }
+                    query.Dispose();
                     return new AuctionItems(items, $"{stopWatch.Elapsed.TotalMilliseconds}ms", $"{stopWatch.Elapsed.TotalMilliseconds}ms");
 		        }
             }
