@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -18,6 +19,7 @@ using Wavelength.Core.Models;
 using Wavelength.Server.WebAPI.Hubs;
 using Wavelength.Server.WebAPI.Providers;
 using Wavelength.Server.WebAPI.Repositories;
+using Wavelength.Server.WebAPI.Services;
 
 namespace Wavelength.Server.WebAPI
 {
@@ -63,8 +65,10 @@ namespace Wavelength.Server.WebAPI
                 services.AddSingleton<IAuctionRepository, AuctionRepository>();
             }
             else 
-	        { 
-	        }
+	        {
+                services.AddSingleton<CouchbaseLiteService>();
+                services.AddSingleton<IAuctionRepository, AuctionCBLiteRepository>();
+            }
 
             //adding mediatr for cqrs support
             services.AddMediatR(typeof(Program));
@@ -93,8 +97,47 @@ namespace Wavelength.Server.WebAPI
 
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            //get the database service for configuring Couchbase
+            var dbService = app.ApplicationServices.GetService<CouchbaseLiteService>();
+
+            if (_couchbaseConfig.Mode == CouchbaseConfig.ModeCBLite)
+            {
+                appLifetime.ApplicationStarted.Register(() =>
+                {
+                    var dbService = app.ApplicationServices.GetService<CouchbaseLiteService>();
+                    var fp = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "StaticFiles");
+                    if (!System.IO.Directory.Exists(fp))
+                    {
+                        System.IO.Directory.CreateDirectory(fp);
+                    }
+                    app.UseStaticFiles(new StaticFileOptions
+                    {
+                        FileProvider = new PhysicalFileProvider(fp),
+                        RequestPath = "/StaticFiles"
+                    });
+
+                    dbService?.InitDatabase(fp);
+                });
+            }
+
+            //remove couchbase from memory when ASP.NET closes
+            appLifetime.ApplicationStopped.Register(() => 
+	        {
+                if (_couchbaseConfig.Mode == CouchbaseConfig.ModeCBLite)
+                {
+                    //stop replication
+                    dbService?.StopReplication();
+                    dbService?.Dispose();
+                }
+                else
+                {
+                    app.ApplicationServices
+                   .GetRequiredService<ICouchbaseLifetimeService>()
+                   .Close();
+                }
+            });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint.
             app.UseSwagger();

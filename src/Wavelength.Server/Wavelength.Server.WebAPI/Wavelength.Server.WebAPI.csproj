@@ -34,6 +34,7 @@
     <None Remove="Providers\" />
     <None Remove="Couchbase.Lite.Enterprise" />
     <None Remove="Features\Bid\CreateBidCommand\" />
+    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\" />
@@ -45,6 +46,7 @@
     <Folder Include="Repositories\" />
     <Folder Include="Providers\" />
     <Folder Include="Features\Bid\CreateBidCommand\" />
+    <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="9.0.0" />
@@ -57,6 +59,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="Couchbase.Extensions.DependencyInjection" Version="3.2.0" />
     <PackageReference Include="CouchbaseNetClient" Version="3.2.3" />
-    <PackageReference Include="Couchbase.Lite.Enterprise" Version="2.8.6" />
+    <PackageReference Include="Couchbase.Lite.Enterprise" Version="3.0.0-beta02" />
   </ItemGroup>
 </Project>

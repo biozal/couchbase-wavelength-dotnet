@@ -10,11 +10,13 @@
     <None Remove="DataAccessObjects\" />
     <None Remove="Models\" />
     <None Remove="Repositories\" />
+    <None Remove="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DomainObjects\" />
     <Folder Include="DataAccessObjects\" />
     <Folder Include="Models\" />
     <Folder Include="Repositories\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>
