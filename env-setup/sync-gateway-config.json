@@ -32,7 +32,7 @@
 		"wavelength": {
 		  "import_docs": true,
 		  "bucket":"wavelength",
-		  "server": "http://cb-server:8091",
+		  "server": "http://cb-server-7:8091",
 		  "enable_shared_bucket_access":true,
 		  "delta_sync": {
 			"enabled":false

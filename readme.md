@@ -13,7 +13,9 @@ TODO - explain process
 To run locally you need to use the scripts in the sync directory in this order:
 
 - docker-create-bridge.sh
+- docker-cb-server.sh
+- docker-init-cluster.sh
+- init-docker-env-data.sh
 - sync-gateway.sh
-- restapi-config-sync.sh
 
 You can use the logs-sync-gateway.sh to validate the configuration is working with Sync Gateway.
