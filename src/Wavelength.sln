@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wavelength.Core", "Waveleng
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wavelength.Server.WebAPI", "Wavelength.Server\Wavelength.Server.WebAPI\Wavelength.Server.WebAPI.csproj", "{1958B359-E3E0-4CBB-AC85-A9058DB278A7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wavelength.Server.PerfTest", "Wavelength.Server\Wavelength.Server.PerfTest\Wavelength.Server.PerfTest.csproj", "{76BC713E-BFFA-48C4-B115-5AC20C32000E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +91,18 @@ Global
 		{1958B359-E3E0-4CBB-AC85-A9058DB278A7}.Debug|iPhone.Build.0 = Debug|Any CPU
 		{1958B359-E3E0-4CBB-AC85-A9058DB278A7}.Release|iPhone.ActiveCfg = Release|Any CPU
 		{1958B359-E3E0-4CBB-AC85-A9058DB278A7}.Release|iPhone.Build.0 = Release|Any CPU
+		{76BC713E-BFFA-48C4-B115-5AC20C32000E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76BC713E-BFFA-48C4-B115-5AC20C32000E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76BC713E-BFFA-48C4-B115-5AC20C32000E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76BC713E-BFFA-48C4-B115-5AC20C32000E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76BC713E-BFFA-48C4-B115-5AC20C32000E}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{76BC713E-BFFA-48C4-B115-5AC20C32000E}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{76BC713E-BFFA-48C4-B115-5AC20C32000E}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{76BC713E-BFFA-48C4-B115-5AC20C32000E}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{76BC713E-BFFA-48C4-B115-5AC20C32000E}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{76BC713E-BFFA-48C4-B115-5AC20C32000E}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{76BC713E-BFFA-48C4-B115-5AC20C32000E}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{76BC713E-BFFA-48C4-B115-5AC20C32000E}.Release|iPhone.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,5 +116,6 @@ Global
 		{20E81E52-7D93-4443-BBA0-F915FCFE32DC} = {99B18E37-9BA6-4F13-9872-DDF02FB2E8D3}
 		{A15EC48B-A915-4394-ACEF-9DF4BEF5FB3A} = {E9E3A34C-B849-4955-852A-A25696A87E62}
 		{1958B359-E3E0-4CBB-AC85-A9058DB278A7} = {BD0C06F3-48D4-4A0B-A966-1DAE105D8402}
+		{76BC713E-BFFA-48C4-B115-5AC20C32000E} = {BD0C06F3-48D4-4A0B-A966-1DAE105D8402}
 	EndGlobalSection
 EndGlobal

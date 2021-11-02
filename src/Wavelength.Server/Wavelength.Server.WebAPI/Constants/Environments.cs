@@ -7,5 +7,8 @@ namespace Wavelength.Server.WebAPI.Constants
         public const string UAT = "UAT";
         public const string Staging = "Staging";
         public const string Production = "Production";
+
+        public const string IndexDocumentType = "idx_document_type";
+        public const string IndexIsActive = "idx_isactive";
     }
 }
