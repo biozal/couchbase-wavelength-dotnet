@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Couchbase.Lite.Query;
 using Newtonsoft.Json;
 using Wavelength.Core.DataAccessObjects;
 using Wavelength.Core.DomainObjects;
@@ -27,24 +28,25 @@ namespace Wavelength.Server.WebAPI.Repositories
                 var n1qlQuery = $"SELECT * FROM _ AS item WHERE documentType='auction' AND isActive = true LIMIT {limit} OFFSET {skip}";
                 var items = new List<AuctionItem>();
                 var stopWatch = new Stopwatch();
-                using (var query = _couchbaseLiteService.AuctionDatabase.CreateQuery(n1qlQuery)) 
-		        { 
+                using (var query = QueryBuilder.Select(SelectResult.All())
+                        .From(DataSource.Database(_couchbaseLiteService.AuctionDatabase))
+                        .Where(Expression.Property("documentType").EqualTo(Expression.String("auction"))
+                        .And(Expression.Property("isActive").EqualTo(Expression.Boolean(true))))
+                        .Limit(Expression.Int(limit))) 
+
+                {
                     stopWatch.Start();
-                    var results = query.Execute().AllResults();
-                    stopWatch.Stop();
-                    if (results is not null)
+                    foreach (var result in query.Execute())
                     {
-                        foreach (var result in results)
+                        var json = result.ToJSON();
+                        var dto = JsonConvert.DeserializeObject<CBLiteAuctionItemDTO>(json);
+                        if (dto.Item is not null)
                         {
-                            var json = result.ToJSON();
-                            var dto = JsonConvert.DeserializeObject<CBLiteAuctionItemDTO>(json);
-                            if (dto.Item is not null)
-                            {
-                                items.Add(dto.Item);
-                            }
+                            items.Add(dto.Item);
                         }
                     }
-		        }
+                    stopWatch.Stop();
+                }
                 return new AuctionItems(items, $"{stopWatch.Elapsed.TotalMilliseconds}ms", $"{stopWatch.Elapsed.TotalMilliseconds}ms");
             }
             return new AuctionItems(new List<AuctionItem>(), string.Empty, string.Empty);
