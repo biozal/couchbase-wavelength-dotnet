@@ -4,9 +4,17 @@ namespace Wavelength.Core.Models
     public class CouchbaseConfig
     {
         public const string Section = "Couchbase";
+
         public const string ModeServer = "Server";
         public const string ModeCBLite = "CBLite";
 
+        public const string LocationCloud = "Cloud";
+        public const string LocationCloudName = "AWS - Cloud";
+
+        public const string LocationWavelength = "Wavelength";
+        public const string LocationWavelengthName = "AWS Wavelength - Verizon";
+
+        public string? Location { get; set; }
         public string? Mode { get; set; }
         public string? Username { get; set; }
         public string? Password { get; set; }

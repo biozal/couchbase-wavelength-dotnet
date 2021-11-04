@@ -33,19 +33,13 @@
     <None Remove="Repositories\" />
     <None Remove="Providers\" />
     <None Remove="Couchbase.Lite.Enterprise" />
-    <None Remove="Features\Bid\CreateBidCommand\" />
     <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\" />
-    <Folder Include="Features\Auctions\" />
-    <Folder Include="Hubs\" />
-    <Folder Include="Features\Bid\" />
     <Folder Include="Features\Auctions\GetAuctionsQuery\" />
     <Folder Include="Constants\" />
     <Folder Include="Repositories\" />
     <Folder Include="Providers\" />
-    <Folder Include="Features\Bid\CreateBidCommand\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
@@ -58,7 +52,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="Couchbase.Extensions.DependencyInjection" Version="3.2.0" />
-    <PackageReference Include="CouchbaseNetClient" Version="3.2.3" />
-    <PackageReference Include="Couchbase.Lite.Enterprise" Version="2.8.2" />
+    <PackageReference Include="CouchbaseNetClient" Version="3.2.4" />
+    <PackageReference Include="Couchbase.Lite.Enterprise" Version="2.8.6" />
   </ItemGroup>
 </Project>

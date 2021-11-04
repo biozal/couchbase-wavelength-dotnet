@@ -20,9 +20,6 @@
     <None Remove="DTO\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DomainObjects\" />
-    <Folder Include="DataAccessObjects\" />
-    <Folder Include="Models\" />
     <Folder Include="Exceptions\" />
     <Folder Include="DTO\" />
   </ItemGroup>

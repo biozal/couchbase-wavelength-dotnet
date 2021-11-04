@@ -9,7 +9,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Wavelength.Core.Models;
-using Wavelength.Server.WebAPI.Hubs;
+using Wavelength.Server.WebAPI.Middleware;
 using Wavelength.Server.WebAPI.Providers;
 using Wavelength.Server.WebAPI.Repositories;
 using Wavelength.Server.WebAPI.Services;
@@ -31,7 +31,6 @@ namespace Wavelength.Server.WebAPI
 		public void ConfigureServices(IServiceCollection services)
 		{
 
-			services.AddSignalR();
 			services.AddControllers();
 			//Register the Swagger generator, defining 1 or more Swagger documents
 			services.AddSwaggerGen(c =>
@@ -74,7 +73,7 @@ namespace Wavelength.Server.WebAPI
 
 
 			//pipeline for validation
-			//services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+			services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -146,7 +145,6 @@ namespace Wavelength.Server.WebAPI
 
 			app.UseEndpoints(endpoints =>
 			{
-				endpoints.MapHub<BiddingHub>("hubs/bidding");
 				endpoints.MapControllers();
 			});
 		}
