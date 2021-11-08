@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Couchbase.Lite.Query;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Couchbase.Lite.Query;
-using Newtonsoft.Json;
 using Wavelength.Core.DataAccessObjects;
 using Wavelength.Core.DomainObjects;
 using Wavelength.Core.DTO;

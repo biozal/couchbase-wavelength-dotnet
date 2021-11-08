@@ -1,11 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Wavelength.Core.DataAccessObjects;
 
 namespace Wavelength.Server.WebAPI.Features.Auction.CreateBidCommand
 {
     public class RequestCommand
-        : IRequest<Core.DataAccessObjects.BidDAO> 
+        : IRequest<BidDAO> 
     {
         //AuctionId - required to help calculate a winner
         [FromRoute]

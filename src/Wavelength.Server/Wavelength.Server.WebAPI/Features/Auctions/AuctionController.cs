@@ -1,10 +1,12 @@
-﻿using MediatR;
+﻿using Couchbase.Core.Exceptions.KeyValue;
+using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Wavelength.Server.WebAPI.Core.Exceptions;
 
 namespace Wavelength.Server.WebAPI.Features.Auctions
 {
@@ -55,7 +57,7 @@ namespace Wavelength.Server.WebAPI.Features.Auctions
 
 		[HttpPost]
 		[Route("[action]")]
-		public async Task<IActionResult> Post(
+		public async Task<IActionResult> Bid(
 			[FromBody] Auction.CreateBidCommand.RequestCommand requestCommand)
 		{
 			var stopWatch = new Stopwatch();
@@ -74,6 +76,16 @@ namespace Wavelength.Server.WebAPI.Features.Auctions
 				stopWatch.Stop();
 				return this.Problem();
 			}
+			catch (AuctionEndedException)
+			{
+				return this.ValidationProblem();
+			}
+			catch (Exception ex) 
+				when (ex is DocumentNotFoundException || ex is AuctionNotFoundException) 
+            {
+				stopWatch.Stop();
+				return this.NotFound();
+            }
 			catch (Exception ex)
 			{
 				stopWatch.Stop();

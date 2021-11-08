@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Wavelength.Core.DataAccessObjects;
 using Wavelength.Core.DomainObjects;
 using Wavelength.Core.Models;
+using Wavelength.Server.WebAPI.Services;
 
 namespace Wavelength.Server.WebAPI.Repositories
 {
@@ -21,13 +22,11 @@ namespace Wavelength.Server.WebAPI.Repositories
 		public AuctionRepository(
 			IClusterProvider clusterProvider,
 			ILogger<AuctionRepository> logger,
-			IConfiguration configuration)
+			ICouchbaseConfigService configuration)
 		{
 			_logger = logger;
 			_clusterProvider = clusterProvider;
-			//get config from JSON file configuration
-			_couchbaseConfig = new CouchbaseConfig();
-			configuration.GetSection(CouchbaseConfig.Section).Bind(_couchbaseConfig);
+			_couchbaseConfig = configuration.Config;
 		}
 
 		public async Task<AuctionItems> GetAuctionItems(int limit = 25, int skip = 0)

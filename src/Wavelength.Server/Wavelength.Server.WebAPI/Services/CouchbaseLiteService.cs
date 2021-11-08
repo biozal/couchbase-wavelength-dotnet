@@ -1,14 +1,15 @@
-﻿using System;
-using Couchbase.Lite;
+﻿using Couchbase.Lite;
 using Couchbase.Lite.Query;
 using Couchbase.Lite.Sync;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
+using Wavelength.Core.Exceptions;
 using Wavelength.Core.Models;
 
 namespace Wavelength.Server.WebAPI.Services
 {
-	public class CouchbaseLiteService
+    public class CouchbaseLiteService
 	{
 		private readonly CouchbaseConfig _couchbaseConfig;
 		private readonly ILogger<CouchbaseLiteService> _logger;
@@ -106,7 +107,7 @@ namespace Wavelength.Server.WebAPI.Services
 			}
 			else 
 			{
-				throw new Core.Exceptions.SyncGatewayConfigMissingException();
+				throw new SyncGatewayConfigMissingException();
 			}
 
 		}

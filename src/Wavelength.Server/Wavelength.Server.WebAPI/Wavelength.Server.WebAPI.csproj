@@ -18,6 +18,7 @@
     <Optimize>True</Optimize>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Dockerfile.cloud" />
     <None Remove="Features\" />
     <None Remove="Features\Auctions\" />
     <None Remove="Hubs\" />
@@ -43,7 +44,6 @@
     <Folder Include="Features\Auctions\GetAuctionsQuery\" />
     <Folder Include="Constants\" />
     <Folder Include="Providers\" />
-    <Folder Include="Services\" />
     <Folder Include="StaticFiles\" />
   </ItemGroup>
   <ItemGroup>

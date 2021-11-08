@@ -19,12 +19,11 @@ namespace Wavelength.Server.WebAPI
     public class Startup
 	{
 		public IConfiguration Configuration { get; }
-		private CouchbaseConfig _couchbaseConfig;
-
+		private ICouchbaseConfigService _config;
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
-			_couchbaseConfig = new CouchbaseConfig();
+			_config = new CouchbaseConfigService(Configuration);	
 		}
 
 		// This method gets called by the runtime. Use this method to add services to the container.
@@ -45,14 +44,18 @@ namespace Wavelength.Server.WebAPI
 				c.CustomSchemaIds((type) => type.FullName);
 				c.DescribeAllParametersInCamelCase();
 			});
-			services.Configure<CouchbaseConfig>(Configuration.GetSection(CouchbaseConfig.Section));
 
-			_couchbaseConfig = new CouchbaseConfig();
-			Configuration.GetSection(CouchbaseConfig.Section).Bind(_couchbaseConfig);
-
-			if (_couchbaseConfig.Mode == CouchbaseConfig.ModeServer) 
+			//setup the couchbase config
+			_config.InitConfig();
+			services.AddSingleton<ICouchbaseConfigService>(_config);
+				
+			if (_config.Config.Mode == CouchbaseConfig.ModeServer) 
 			{
-				services.AddCouchbase(Configuration.GetSection(CouchbaseConfig.Section));
+				services.AddCouchbase(options => { 
+					options.ConnectionString = _config.Config.ConnectionString;
+					options.UserName = _config.Config.Username;
+					options.Password = _config.Config.Password;
+				});
 				services.AddCouchbaseBucket<IWavelengthBucketProvider>("wavelength");
 				services.AddSingleton<IAuctionRepository, AuctionRepository>();
 				services.AddSingleton<IBidRepository, BidRepository>();
@@ -93,9 +96,10 @@ namespace Wavelength.Server.WebAPI
 			app.UseCookiePolicy();
 
 			//get the database service for configuring Couchbase
+			var configService = app.ApplicationServices.GetService<ICouchbaseConfigService>();
 			var dbService = app.ApplicationServices.GetService<CouchbaseLiteService>();
 
-			if (_couchbaseConfig.Mode == CouchbaseConfig.ModeCBLite)
+			if (_config.Config.Mode == CouchbaseConfig.ModeCBLite)
 			{
 				appLifetime.ApplicationStarted.Register(() =>
 				{
@@ -118,7 +122,7 @@ namespace Wavelength.Server.WebAPI
 			//remove couchbase from memory when ASP.NET closes
 			appLifetime.ApplicationStopped.Register(() => 
 			{
-				if (_couchbaseConfig.Mode == CouchbaseConfig.ModeCBLite)
+				if (_config.Config.Mode == CouchbaseConfig.ModeCBLite)
 				{
 					//stop replication
 					dbService?.StopReplication();

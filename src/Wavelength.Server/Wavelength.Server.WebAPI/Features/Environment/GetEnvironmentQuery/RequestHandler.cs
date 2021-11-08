@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Wavelength.Core.DataAccessObjects;
 using Wavelength.Core.Models;
+using Wavelength.Server.WebAPI.Services;
 
 namespace Wavelength.Server.WebAPI.Features.Environment.GetEnvironmentQuery
 {
@@ -17,11 +18,9 @@ namespace Wavelength.Server.WebAPI.Features.Environment.GetEnvironmentQuery
         private readonly CouchbaseConfig _couchbaseConfig;
 
         public RequestHandler(
-            IConfiguration configuration)
+            ICouchbaseConfigService configuration)
         {
-            //get config from JSON file configuration
-            _couchbaseConfig = new CouchbaseConfig();
-            configuration.GetSection(CouchbaseConfig.Section).Bind(_couchbaseConfig);
+            _couchbaseConfig = configuration.Config;
         }
 
         public async Task<AppEnvironmentDAO> Handle(
