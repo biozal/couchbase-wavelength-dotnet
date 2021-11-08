@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Wavelength.Core.DomainObjects
 {
     public class Bid
         : DomainBase
     {
-        public override string? DocumentType { get; set; } = "Bid";
+        public override string? DocumentType { get; set; } = "bid";
         public Guid DeviceId { get; set; }
         public Guid BidId { get; set; }
         public Guid AuctionId { get; set; }
-        public DateTimeOffset Sent { get; set; }
         public DateTimeOffset Received { get; set; }
-        public double NetworkLatency { get; set; } 
         public string LocationName { get; set; } = string.Empty;
 
         public DataAccessObjects.BidDAO ToBidDAO()
@@ -26,9 +20,9 @@ namespace Wavelength.Core.DomainObjects
                 DocumentId = DocumentId ?? Guid.NewGuid(),
                 BidId = BidId,
                 AuctionId = AuctionId,
-                Sent = Sent,
                 Received = Received,
-                LocationName = LocationName
+                LocationName = LocationName,
+                PerformanceMetrics = new Models.Metrics() 
             };
         }
     }

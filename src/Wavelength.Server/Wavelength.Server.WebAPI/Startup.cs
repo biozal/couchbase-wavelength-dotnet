@@ -16,7 +16,7 @@ using Wavelength.Server.WebAPI.Services;
 
 namespace Wavelength.Server.WebAPI
 {
-	public class Startup
+    public class Startup
 	{
 		public IConfiguration Configuration { get; }
 		private CouchbaseConfig _couchbaseConfig;
@@ -55,6 +55,7 @@ namespace Wavelength.Server.WebAPI
 				services.AddCouchbase(Configuration.GetSection(CouchbaseConfig.Section));
 				services.AddCouchbaseBucket<IWavelengthBucketProvider>("wavelength");
 				services.AddSingleton<IAuctionRepository, AuctionRepository>();
+				services.AddSingleton<IBidRepository, BidRepository>();
 			}
 			else 
 			{

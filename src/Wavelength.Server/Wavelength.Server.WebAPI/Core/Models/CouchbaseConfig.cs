@@ -8,6 +8,9 @@ namespace Wavelength.Core.Models
         public const string ModeServer = "Server";
         public const string ModeCBLite = "CBLite";
 
+        public const string LocationDev = "Development";
+        public const string LocationDevName = "Development";
+
         public const string LocationCloud = "Cloud";
         public const string LocationCloudName = "AWS - Cloud";
 

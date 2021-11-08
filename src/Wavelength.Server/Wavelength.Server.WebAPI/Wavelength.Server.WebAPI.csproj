@@ -3,16 +3,20 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;Cloud;Wavelength</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Wavelength.Shared\Wavelength.Core\Wavelength.Core.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
-  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Cloud|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Wavelength|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
   <ItemGroup>
     <None Remove="Features\" />
     <None Remove="Features\Auctions\" />
@@ -38,9 +42,9 @@
   <ItemGroup>
     <Folder Include="Features\Auctions\GetAuctionsQuery\" />
     <Folder Include="Constants\" />
-    <Folder Include="Repositories\" />
     <Folder Include="Providers\" />
     <Folder Include="Services\" />
+    <Folder Include="StaticFiles\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="9.0.0" />

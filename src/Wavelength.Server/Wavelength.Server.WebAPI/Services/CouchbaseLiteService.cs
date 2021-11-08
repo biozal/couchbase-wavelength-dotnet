@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using Couchbase.Lite;
 using Couchbase.Lite.Query;
 using Couchbase.Lite.Sync;

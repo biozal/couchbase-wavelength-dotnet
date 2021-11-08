@@ -1,32 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-using Microsoft.Extensions.Logging;
-
-using MediatR;
-using Wavelength.Core.DataAccessObjects;
+﻿using MediatR;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Threading;
+using System.Threading.Tasks;
+using Wavelength.Core.DataAccessObjects;
+using Wavelength.Core.DomainObjects;
+using Wavelength.Core.Models;
+using Wavelength.Server.WebAPI.Repositories;
 
 namespace Wavelength.Server.WebAPI.Features.Auction.CreateBidCommand
 {
     public class RequestHandler
         : IRequestHandler<RequestCommand, BidDAO>
     {
-        private readonly ILogger<RequestHandler> _logger;
-
+        private readonly CouchbaseConfig _couchbaseConfig;
+        private readonly IBidRepository _bidRepository;
+    
         public RequestHandler(
-            ILogger<RequestHandler> logger)
+            IConfiguration configuration,
+            IBidRepository bidRepository)
+            
         {
-            _logger = logger;
+            _bidRepository = bidRepository; 
+            _couchbaseConfig = new CouchbaseConfig();
+            configuration.GetSection(CouchbaseConfig.Section).Bind(_couchbaseConfig);
         }
 
         public async Task<BidDAO> Handle(
-                RequestCommand request, 
+                RequestCommand request,
                 CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            //calculate location
+            var location = string.Empty;
+            switch (_couchbaseConfig.Location)
+            {
+                case CouchbaseConfig.LocationCloud:
+                    location = CouchbaseConfig.LocationCloudName;
+                    break;
+                case CouchbaseConfig.LocationDev:
+                    location = CouchbaseConfig.LocationDevName;
+                    break;
+                default:
+                    location = CouchbaseConfig.LocationWavelengthName;
+                    break;
+            }
+            //calculate aprox network latency for request
+            var documentId = Guid.NewGuid();
+
+            //create the bid to write to the database
+            var bid = new Bid()
+            {
+                DocumentId = documentId,
+                AuctionId = request.Id,
+                BidId = request.BidId,
+                DeviceId = request.DeviceId,
+                IsActive = true,
+                LocationName = location,
+                Received = request.Received
+            };
+            var results = await _bidRepository.CreateBid(documentId.ToString(), bid);
+            var dao = bid.ToBidDAO();
+            dao.PerformanceMetrics.DbElapsedTime = results.DbElapsedTime;
+            dao.PerformanceMetrics.DbExecutionTime = results.DbExecutionTime;
+            return dao; 
         }
     }
 }

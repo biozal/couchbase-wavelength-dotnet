@@ -1,5 +1,4 @@
-﻿using System;
-using Wavelength.Core.DomainObjects;
+﻿using Wavelength.Core.DomainObjects;
 
 namespace Wavelength.Core.DTO
 {

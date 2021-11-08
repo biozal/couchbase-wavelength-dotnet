@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Wavelength.Core.DataAccessObjects
 {
-	public class AuctionItems
+    public class AuctionItems
 	{
 		public IList<DomainObjects.AuctionItem> Items { get; set; }
 		public string DbQueryExecutionTime { get; set;}

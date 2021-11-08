@@ -4,7 +4,7 @@ namespace Wavelength.Core.DomainObjects
     public class AuctionItem 
         : DomainBase
     {
-        public override string? DocumentType { get; set; } = "Auction";
+        public override string? DocumentType { get; set; } = "auction";
         public string? Title { get; set; }
         public string? ImageUrl { get; set; }
         public DateTimeOffset? StopTime { get; set; }

@@ -147,7 +147,5 @@
       <Name>Wavelength</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Network\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

@@ -19,10 +19,6 @@ namespace Wavelength.Server.WebAPI.Features.Auction.CreateBidCommand
         [FromBody]
         public Guid BidId { get; set; }  
 
-        //Sent - the time the request was sent from the mobile device
-        [FromBody]
-        public DateTimeOffset Sent { get; set; }
-
-
+        public DateTimeOffset Received { get; private set; } = DateTimeOffset.UtcNow;
     }
 }
