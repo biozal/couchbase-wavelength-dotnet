@@ -34,9 +34,6 @@ namespace Wavelength.Server.WebAPI.Repositories
 			_bucketProvider = bucketProvider;
 			_logger = logger;
 			_couchbaseConfig = configuration.Config;
-
-
-
 		}
 
 		public async Task<AuctionItems> GetAuctionItems(
