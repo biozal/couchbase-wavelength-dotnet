@@ -180,7 +180,9 @@ namespace Wavelength.Server.WebAPI.Repositories
 			auctionSb.Append("AND ");
 			auctionSb.Append("a.isActive = true ");
 			auctionSb.Append("AND ");
-			auctionSb.Append("a.isWinnerCalculated = false");
+			auctionSb.Append("a.isWinnerCalculated = false ");
+			auctionSb.Append("AND ");
+			auctionSb.Append($"a.stopTime <= '{DateTimeOffset.Now.ToString("s", System.Globalization.CultureInfo.InvariantCulture)}' ");
 
 			var auctionQuery = auctionSb.ToString();
 			var auctionResults = await cluster

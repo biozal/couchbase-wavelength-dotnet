@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using System;
 
 namespace Wavelength.Server.WebAPI
 {
@@ -8,7 +9,14 @@ namespace Wavelength.Server.WebAPI
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            try 
+            {
+                CreateHostBuilder(args).Build().Run();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"{ex.Message} {ex.StackTrace}");
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
