@@ -3,17 +3,22 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;Cloud;Wavelength</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Cloud|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Wavelength|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Wavelength.Shared\Wavelength.Core\Wavelength.Core.csproj">
-      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Dockerfile.cloud" />
     <None Remove="Features\" />
     <None Remove="Features\Auctions\" />
     <None Remove="Hubs\" />
@@ -33,20 +38,13 @@
     <None Remove="Repositories\" />
     <None Remove="Providers\" />
     <None Remove="Couchbase.Lite.Enterprise" />
-    <None Remove="Features\Bid\CreateBidCommand\" />
     <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\" />
-    <Folder Include="Features\Auctions\" />
-    <Folder Include="Hubs\" />
-    <Folder Include="Features\Bid\" />
     <Folder Include="Features\Auctions\GetAuctionsQuery\" />
     <Folder Include="Constants\" />
-    <Folder Include="Repositories\" />
     <Folder Include="Providers\" />
-    <Folder Include="Features\Bid\CreateBidCommand\" />
-    <Folder Include="Services\" />
+    <Folder Include="StaticFiles\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MediatR" Version="9.0.0" />
@@ -58,7 +56,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
     <PackageReference Include="Couchbase.Extensions.DependencyInjection" Version="3.2.0" />
-    <PackageReference Include="CouchbaseNetClient" Version="3.2.3" />
-    <PackageReference Include="Couchbase.Lite.Enterprise" Version="3.0.0-beta02" />
+    <PackageReference Include="CouchbaseNetClient" Version="3.2.4" />
+    <PackageReference Include="Couchbase.Lite.Enterprise" Version="2.8.6" />
   </ItemGroup>
 </Project>

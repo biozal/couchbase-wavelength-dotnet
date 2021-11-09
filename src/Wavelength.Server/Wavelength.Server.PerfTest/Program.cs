@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net.Http;
+using System.Threading.Tasks;
+using NBomber.Contracts;
 using NBomber.CSharp;
 using NBomber.Plugins.Http.CSharp;
 using NBomber.Plugins.Network.Ping;
@@ -10,29 +12,37 @@ namespace Wavelength.Server.PerfTest
     {
         static void Main(string[] args)
         {
-            using var httpClient = new HttpClient();
-            var step = Step.Create("fetchAuctions", 
-		                            clientFactory: HttpClientFactory.Create(),
-				                    execute: context => { 
-		        var request = Http.CreateRequest("GET", "https://localhost:9001/api/v1/Auction"); 
-                return Http.Send(request, context);
-            });
+	        using (var httpClientHandler = new HttpClientHandler()) 
+	        {
+                httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+                var httpClient = new HttpClient(httpClientHandler);
+                var step = Step.Create("fetchAuctions", async context => {
 
-            var scenario = ScenarioBuilder
-                            .CreateScenario("auctionsScenario", step)
-                            .WithWarmUpDuration(TimeSpan.FromSeconds(5))
-                            .WithLoadSimulations(
-                                Simulation.InjectPerSec(rate: 250, during: TimeSpan.FromSeconds(30))
-                            );
+                    var response = await httpClient.GetAsync("https://192.168.50.225:9001/api/v1/Auction", context.CancellationToken);
+                    return response.IsSuccessStatusCode
+                        ? Response.Ok(statusCode: (int)response.StatusCode, sizeBytes: response.ToNBomberResponse().SizeBytes)
+                        : Response.Fail(statusCode: (int)response.StatusCode);
+                });
 
-            // creates ping plugin that brings additional reporting data
-            var pingPluginConfig = PingPluginConfig.CreateDefault(new[] { "localhost" });
-            var pingPlugin = new PingPlugin(pingPluginConfig);
+                var scenario = ScenarioBuilder
+                                .CreateScenario("auctionsScenario", step)
+                                .WithWarmUpDuration(TimeSpan.FromSeconds(5))
+                                .WithLoadSimulations(
+                                    Simulation.InjectPerSec(rate: 100, during: TimeSpan.FromSeconds(30))
+                                );
 
-            NBomberRunner
-                .RegisterScenarios(scenario)
-                .WithWorkerPlugins(pingPlugin)
-                .Run();
-        }
+                // creates ping plugin that brings additional reporting data
+                var pingPluginConfig = PingPluginConfig.CreateDefault(new[] { "192.168.50.225" });
+                var pingPlugin = new PingPlugin(pingPluginConfig);
+
+                NBomberRunner
+                    .RegisterScenarios(scenario)
+                    .WithWorkerPlugins(pingPlugin)
+                    .Run();
+
+                httpClient.Dispose();
+                httpClient = null;
+            }
+	    }
 	}
 }

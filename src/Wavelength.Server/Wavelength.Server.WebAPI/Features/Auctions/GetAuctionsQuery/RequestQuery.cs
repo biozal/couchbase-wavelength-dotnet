@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using MediatR;
+﻿using MediatR;
 using Wavelength.Core.DataAccessObjects;
 
 namespace Wavelength.Server.WebAPI.Features.Auctions.GetAuctionsQuery
