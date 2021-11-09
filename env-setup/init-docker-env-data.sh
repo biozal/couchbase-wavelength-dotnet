@@ -25,12 +25,32 @@ curl -v http://localhost:8093/query/service \
   -u Administrator:password \
   -d 'statement=CREATE INDEX idx_wavelength_document_type on wavelength(documentType)'
 
+sleep 5 
+curl -v http://localhost:8093/query/service \
+  -u Administrator:password \
+  -d "statement=CREATE INDEX idx_wavelength_document_type_auction_isWinnerCalculated on wavelength(isActive, stopTime, isWinnerCalculated) WHERE documentType='auction'"
+
+sleep 4
+curl -v http://localhost:8092/query/service \
+    -u Administrator:password \
+    -d "CREATE INDEX adv_isWinnerCalculated_documentType_isActive ON wavelength (documentType, isActive, isWinnerCalculated)
+WHERE documentType = 'auction' AND isActive = true and isWinnerCalculated = false"
+
 sleep 5
 curl -v http://localhost:8093/query/service \
   -u Administrator:password \
   -d 'statement=CREATE INDEX idx_wavelength_auction_active on wavelength(isActive)'
 
+sleep 5
+curl -v http://localhost:8093/query/service \
+  -u Administrator:password \
+  -d "statement=CREATE INDEX adv_locationName_documentType ON `wavelength`(`locationName`,`documentType`)"
 #load sample data
+sleep 5
+curl -v http://localhost:8093/query/service \
+    -u Administrator:password \
+    -d "CREATE INDEX adv_locationName_received_documentType ON `wavelength`(`locationName`,`received`) WHERE `documentType` = 'bid'"
+
 docker cp sample-documents-server.json \
 cb-server-7:/sample-documents-server.json
 

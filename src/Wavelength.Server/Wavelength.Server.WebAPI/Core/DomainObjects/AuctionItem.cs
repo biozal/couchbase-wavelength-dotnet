@@ -9,7 +9,7 @@ namespace Wavelength.Core.DomainObjects
         public string? ImageUrl { get; set; }
         public DateTimeOffset? StopTime { get; set; }
         public bool IsWinnerCalculated { get; set; }
-        public Guid WinnerDeviceId { get; set; }
+        public Guid? WinnerDeviceId { get; set; }
 
         public DataAccessObjects.AuctionItemDAO ToAuctionItemDAO()
         {
@@ -18,7 +18,9 @@ namespace Wavelength.Core.DomainObjects
                 Id = DocumentId.ToString() ?? Guid.NewGuid().ToString(),
                 ImageUrl = ImageUrl ?? "",
                 Title = Title ?? "",
-                StopTime = StopTime ?? DateTime.Now
+                StopTime = StopTime ?? DateTime.Now,
+                IsWinnerCalculated = IsWinnerCalculated,
+                WinnerDeviceId = WinnerDeviceId 
             };
         }
     }

@@ -93,6 +93,26 @@ namespace Wavelength.Server.WebAPI.Features.Auctions
 			}
 		}
 
+		[HttpPost]
+		[Route("[action]")]
+		public async Task<IActionResult> Close(
+				  [FromBody] CloseAuctionsCommand.RequestCommand requestCommand)
+		{
+            try
+            {
+				var response = await _mediator.Send(requestCommand);
+				if (response is not null)
+				{
+					return this.Ok(response);
+				}
+				return this.Problem();
+			}
+            catch (Exception ex)
+            {
+				return DealWithErrors(ex);
+            }
+		}
+
 		private IActionResult DealWithErrors(Exception ex) 
 		{
 			switch (_hostEnvironment.EnvironmentName)

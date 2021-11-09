@@ -20,6 +20,11 @@ namespace Wavelength.Server.WebAPI.Repositories
             _couchbaseLiteService = couchbaseLiteService;
         }
 
+        public Task<IEnumerable<string>> CloseEndedAuctions()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public async Task<AuctionItems> GetAuctionItems(int limit = 50, int skip = 0)
         {
             if (_couchbaseLiteService.AuctionDatabase is not null)
