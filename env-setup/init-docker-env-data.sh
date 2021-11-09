@@ -33,8 +33,7 @@ curl -v http://localhost:8093/query/service \
 sleep 4
 curl -v http://localhost:8092/query/service \
     -u Administrator:password \
-    -d "CREATE INDEX adv_isWinnerCalculated_documentType_isActive ON wavelength (documentType, isActive, isWinnerCalculated)
-WHERE documentType = 'auction' AND isActive = true and isWinnerCalculated = false"
+    -d "CREATE INDEX adv_stopTime_documentType_isActive_isWinnerCalculated ON wavelength(stopTime) WHERE documentType = 'auction' AND isActive = true AND isWinnerCalculated = false"
 
 sleep 5
 curl -v http://localhost:8093/query/service \
