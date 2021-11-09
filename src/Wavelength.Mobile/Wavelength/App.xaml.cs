@@ -19,7 +19,6 @@ namespace Wavelength
 
 #else
             DependencyService.Register<IHttpClientHandlerFactory, HttpClientHandlerFactory>();
-            DependencyService.Register<IDataStore<Item>, HttpDataStore>();
 #endif
         }
 
