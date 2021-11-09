@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
@@ -8,10 +8,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Features\" />
-    <None Remove="Features\Auctions\" />
-    <None Remove="Hubs\" />
-    <None Remove="Features\Bid\" />
     <None Remove="MediatR" />
     <None Remove="MediatR.Extensions.Microsoft.DependencyInjection" />
     <None Remove="MediatR.Extensions.FluentValidation.AspNetCore" />
@@ -24,16 +20,12 @@
     <None Remove="Constants\" />
     <None Remove="Couchbase.Extensions.DependencyInjection" />
     <None Remove="CouchbaseNetClient" />
-    <None Remove="Repositories\" />
     <None Remove="Providers\" />
     <None Remove="Couchbase.Lite.Enterprise" />
-    <None Remove="Features\Bid\CreateBidCommand\" />
-    <None Remove="Services\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\" />
     <Folder Include="Features\Auctions\" />
-    <Folder Include="Hubs\" />
     <Folder Include="Features\Bid\" />
     <Folder Include="Features\Auctions\GetAuctionsQuery\" />
     <Folder Include="Constants\" />
