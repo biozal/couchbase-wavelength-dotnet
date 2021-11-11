@@ -1,4 +1,5 @@
 ﻿# syntax = docker/dockerfile:1
+FROM scratch
 ENV ASPNETCORE_ENVIRONMENT=Production
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
 WORKDIR /app

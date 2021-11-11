@@ -25,6 +25,21 @@ namespace Wavelength.Server.WebAPI.Repositories
             throw new System.NotImplementedException();
         }
 
+        public Task CreateAuction(System.Guid documentId, AuctionItem newAuctionItem)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> DeactivateAuction(System.Guid documentId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public Task<bool> DeleteAuction(System.Guid documentId)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public async Task<AuctionItems> GetAuctionItems(int limit = 50, int skip = 0)
         {
             if (_couchbaseLiteService.AuctionDatabase is not null)
