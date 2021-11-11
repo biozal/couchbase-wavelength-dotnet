@@ -20,8 +20,8 @@ docker run -d ^
 -e cbsettings_CBSyncGatewayUri='ws://sync-gateway-wavelength:4984/wavelength' ^
 -e cbsettings_CBSyncGatewayUsername='demo' ^
 -e cbsettings_CBSyncGatewayPassword='password' ^
--e cbsettings_CBUseSsl=false
--e cbsettings_CBClosingCode=''
+-e cbsettings_CBUseSsl=false ^
+-e cbsettings_CBClosingCode='123' ^
 -e cbsettings_CBDurabilityPersistToMajority=true
 
 echo "setting up wavelength image on port 9001"
@@ -46,6 +46,6 @@ docker run -d ^
 -e cbsettings_CBSyncGatewayUri='ws://sync-gateway-wavelength:4984/wavelength' ^
 -e cbsettings_CBSyncGatewayUsername='demo' ^
 -e cbsettings_CBSyncGatewayPassword='password' ^
--e cbsettings_CBUseSsl=false
--e cbsettings_CBClosingCode=''
+-e cbsettings_CBUseSsl=false ^
+-e cbsettings_CBClosingCode='123' ^
 -e cbsettings_CBDurabilityPersistToMajority=true
