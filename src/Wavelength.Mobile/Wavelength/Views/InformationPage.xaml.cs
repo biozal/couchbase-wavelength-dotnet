@@ -14,11 +14,21 @@ namespace Wavelength.Views
             InitializeComponent();
             _viewModel = Startup.ServiceProvider.GetService<InformationViewModel>();
             BindingContext = _viewModel;
+            
+            //bind to the page so we can get the ability to call up
+            //dialogs from the viewmodel
+            _viewModel.SetWeakPage(this);
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _viewModel.OnDisappearing();
         }
 
         private async void Options_Tapped(

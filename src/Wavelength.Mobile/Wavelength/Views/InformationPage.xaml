@@ -13,6 +13,43 @@
     <ContentPage.Content>
     <ScrollView x:DataType="local:InformationViewModel" >
         <StackLayout>
+	        <!-- Device Information -->
+	        <Label 
+		        Margin="28, 30, 0, 0"
+		        Style="{DynamicResource ListItemDetailTextStyle}"
+		        TextColor="{StaticResource PageTextColor}"        
+		        Text="Device">
+	        </Label> 
+	        <Frame
+		        BackgroundColor="{StaticResource CellBackgroundColor}"
+		        CornerRadius="12"
+		        HeightRequest="20"
+		        Margin="12, 4, 12, 8"
+		        Padding="0, 8"
+		        HasShadow="false">
+		        <StackLayout>
+			        <StackLayout
+				        Orientation="Horizontal">
+				        <Label 
+					        Padding="16, 0, 0, 0"
+					        VerticalTextAlignment="Center"
+					        Text="DeviceId"
+					        Style="{DynamicResource SubtitleStyle}"
+					        TextColor="White">
+					        </Label>
+					    <Label 
+					        Margin="2, 0, 16, 0"
+					        Text="{Binding DeviceId}"
+					        LineBreakMode="CharacterWrap"
+					        VerticalTextAlignment="Center"
+					        HorizontalTextAlignment="End"
+					        HorizontalOptions="EndAndExpand"
+					        Style="{DynamicResource ListItemDetailTextStyle}"
+					        TextColor="{StaticResource PageTextColor}">
+				        </Label>
+			        </StackLayout>
+		        </StackLayout>
+	        </Frame>
 	        <!-- network/api connection information -->
 	        <Label 
                 Margin="28, 30, 0, 0"
@@ -89,7 +126,7 @@
 		                </Label>
                         <Label 
                             Margin="2, 0, 16, 0"
-			                Text="wavelength-oregon.couchbase.live"
+			                Text="{Binding RestApiUri}"
                             LineBreakMode="CharacterWrap"
                             VerticalTextAlignment="Center"
                             HorizontalTextAlignment="End"
@@ -112,7 +149,7 @@
             <Frame
 		        BackgroundColor="{StaticResource CellBackgroundColor}"
                 CornerRadius="12"
-                HeightRequest="140"
+                HeightRequest="220"
                 Margin="12, 4, 12, 8"
                 Padding="0, 8"
 		        HasShadow="false">
@@ -128,7 +165,7 @@
 		                </Label>
                         <Label 
                             Margin="2, 0, 16, 0"
-			                Text="wavelength"
+			                Text="{Binding DatabaseName}"
                             LineBreakMode="CharacterWrap"
                             VerticalTextAlignment="Center"
                             HorizontalTextAlignment="End"
@@ -153,7 +190,7 @@
 		                </Label>
                         <Label 
                             Margin="2, 0, 16, 0"
-			                Text="Ok"
+			                Text="{Binding ReplicationStatus}"
                             VerticalTextAlignment="Center"
                             HorizontalTextAlignment="End"
                             HorizontalOptions="EndAndExpand"
@@ -192,6 +229,56 @@
 		                Margin="16, 4, 0, 4" 
 		                Color="{StaticResource SeparatorBackgroundColor}">
 		            </BoxView>
+	                <StackLayout
+		                Orientation="Horizontal">
+		                <Label 
+			                Padding="16, 0, 0, 0"
+			                VerticalTextAlignment="Center"
+			                Text="Auctions"
+			                Style="{DynamicResource SubtitleStyle}"
+			                TextColor="White">
+		                </Label>
+		                <Label 
+			                Margin="2, 0, 16, 0"
+			                Text="{Binding AuctionCount}"
+			                LineBreakMode="CharacterWrap"
+			                VerticalTextAlignment="Center"
+			                HorizontalTextAlignment="End"
+			                HorizontalOptions="EndAndExpand"
+			                Style="{DynamicResource ListItemDetailTextStyle}"
+			                TextColor="{StaticResource PageTextColor}">
+		                </Label>
+	                </StackLayout>
+	                <BoxView 
+		                HeightRequest="1" 
+		                Margin="16, 4, 0, 4" 
+		                Color="{StaticResource SeparatorBackgroundColor}">
+	                </BoxView>
+	                <StackLayout
+		                Orientation="Horizontal">
+		                <Label 
+			                Padding="16, 0, 0, 0"
+			                VerticalTextAlignment="Center"
+			                Text="Bids"
+			                Style="{DynamicResource SubtitleStyle}"
+			                TextColor="White">
+		                </Label>
+		                <Label 
+			                Margin="2, 0, 16, 0"
+			                Text="{Binding BidCount}"
+			                LineBreakMode="CharacterWrap"
+			                VerticalTextAlignment="Center"
+			                HorizontalTextAlignment="End"
+			                HorizontalOptions="EndAndExpand"
+			                Style="{DynamicResource ListItemDetailTextStyle}"
+			                TextColor="{StaticResource PageTextColor}">
+		                </Label>
+	                </StackLayout>
+	                <BoxView 
+		                HeightRequest="1" 
+		                Margin="16, 4, 0, 4" 
+		                Color="{StaticResource SeparatorBackgroundColor}">
+	                </BoxView>
                     <StackLayout
 		                Orientation="Horizontal">
                         <Label 

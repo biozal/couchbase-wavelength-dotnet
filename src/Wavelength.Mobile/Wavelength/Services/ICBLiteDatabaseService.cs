@@ -5,8 +5,8 @@ namespace Wavelength.Services
     public interface ICBLiteDatabaseService
     {
 	    //information display
+	    string DeviceId { get; }
         string DatacenterLocation { get; }
-	    string ReplicationStatus { get; } 
 		string IndexCount { get;  }
 		
 	    //database management
@@ -14,7 +14,9 @@ namespace Wavelength.Services
         Database AuctionDatabase { get; }
         string DatabaseName { get; }
         string DatabaseDirectoryPath { get; }
+        string RestApiUri { get; }
         string SyncGatewayUri { get;  }
+        string LastReplicatorStatus { get; }
 
         void InitDatabase();
         void CloseDatabase();
