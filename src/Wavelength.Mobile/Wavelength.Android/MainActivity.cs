@@ -1,12 +1,15 @@
 ﻿using System;
-
+using System.Net.Http;
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Wavelength.Droid.Network;
 using Wavelength.Services;
-using Wavelength.Models;
+using Wavelength.Repository;
+using Wavelength.Droid.Services;
 
 namespace Wavelength.Droid
 {
@@ -31,15 +34,21 @@ namespace Wavelength.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
 			var formsApp = new App();
-#if DEBUG
-			var handler = new HttpClientHandlerAndroidDebugFactory();
-			var httpDataStore = new HttpDataStore(handler);
-			Xamarin.Forms.DependencyService.RegisterSingleton<IDataStore<AuctionItem, AuctionItems>>(httpDataStore);
-#endif
-			formsApp.RegisterServices();
+            Startup.Init(ConfigureServices, formsApp.RegisterServices);
 			LoadApplication(formsApp);
 			global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
 		}
+        
+        private void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+        {
+#if (DEBUG)
+	        services.AddSingleton<IHttpClientHandlerFactory, HttpClientHandlerAndroidDebugFactory>();
+	        services.AddSingleton<Wavelength.Services.IHttpClientFactory, DebugHttpClientFactory>();
+	        services.AddSingleton<IAuctionHttpRepository, AuctionHttpRepository>();
+#endif
+			services.AddSingleton<IConnectivityService, ConnectivityService>();
+		}
+        
         public override void OnRequestPermissionsResult(
 	        int requestCode, 
 	        string[] permissions, 

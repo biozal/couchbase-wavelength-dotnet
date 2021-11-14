@@ -12,9 +12,11 @@ using Newtonsoft.Json;
 
 namespace Wavelength.ViewModels
 {
-    public class ItemsViewModel : BaseViewModel
+    public class ItemsViewModel 
+	    : BaseViewModel, IViewModel
     {
-        private readonly IAuctionItemRepository _auctionItemRepository; 
+        private readonly IAuctionHttpRepository _auctionHttpRepository;
+        private readonly ICBLiteAuctionRepository _auctionRepository;
 
         private AuctionItem _selectedItem;
 
@@ -22,11 +24,13 @@ namespace Wavelength.ViewModels
         public Command LoadItemsCommand { get; }
         public Command<AuctionItem> ItemTapped { get; }
 
-        public ItemsViewModel()
+        public ItemsViewModel(ICBLiteAuctionRepository auctionRepository)
         {
-            Title = "Wavelength Auctions";
+            Title = "Auctions";
 
-            _auctionItemRepository = DependencyService.Get<IAuctionItemRepository>();
+            _auctionRepository = auctionRepository;
+             
+            _auctionHttpRepository = DependencyService.Get<IAuctionHttpRepository>();
             Items = new ObservableCollection<AuctionItem>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
@@ -40,7 +44,7 @@ namespace Wavelength.ViewModels
             try
             {
                 Items.Clear();
-                var results  = await _auctionItemRepository.GetItemsAsync(true);
+                var results  = await _auctionHttpRepository.GetItemsAsync(true);
                 foreach (var item in results.Items)
                 {
                     Items.Add(item);

@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Foundation;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using UIKit;
 using Wavelength.iOS.Network;
+using Wavelength.iOS.Services;
 using Wavelength.Models;
 using Wavelength.Repository;
 using Wavelength.Services;
@@ -29,17 +32,20 @@ namespace Wavelength.iOS
             global::Xamarin.Forms.Forms.Init();
             global::Xamarin.Forms.FormsMaterial.Init();
             var formsApp = new App();
-#if DEBUG 
-            var handler = new HttpClientHandlerIOSDebugFactory();
-            var clientFactory = new HttpClientFactory(handler);
-            //get httpClient warmed up for reuse
-            var httpClient = clientFactory.GetHttpClient(Constants.RestUri.DevServerBaseUrl);
-            var auctionRepository = new AuctionItemRepository(clientFactory);
-            Xamarin.Forms.DependencyService.RegisterSingleton<IAuctionItemRepository>(auctionRepository);
-#endif
-            formsApp.RegisterServices();
+            Startup.Init(ConfigureServices, formsApp.RegisterServices);
+
             LoadApplication(formsApp);
             return base.FinishedLaunching(app, options);
+        }
+
+        private void ConfigureServices(HostBuilderContext context, IServiceCollection services)
+        {
+#if (DEBUG)
+            services.AddSingleton<IHttpClientHandlerFactory, HttpClientHandlerIOSDebugFactory>();
+            services.AddSingleton<IHttpClientFactory, DebugHttpClientFactory>();
+            services.AddSingleton<IAuctionHttpRepository, AuctionHttpRepository>();
+#endif
+            services.AddSingleton<IConnectivityService, ConnectivityService>();
         }
     }
 }

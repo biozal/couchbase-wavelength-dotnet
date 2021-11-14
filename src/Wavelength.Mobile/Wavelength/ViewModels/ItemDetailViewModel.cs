@@ -48,8 +48,6 @@ namespace Wavelength.ViewModels
             get => _displayStopTime;
             set => SetProperty(ref _displayStopTime, value);
         }
-
-
         public void LoadItem()
         {
             try
@@ -57,7 +55,6 @@ namespace Wavelength.ViewModels
                 var item = JsonConvert.DeserializeObject<AuctionItem>(Item);
                 Text = item.Title;
                 ImageUrl = item.ImageUrl;
-                DisplayStartTime = $"Start Time: {item.StartTime.DateTime.ToShortTimeString()}";
                 DisplayStopTime = $"Stop Time: {item.StopTime.DateTime.ToShortTimeString()}";
             }
             catch (Exception)

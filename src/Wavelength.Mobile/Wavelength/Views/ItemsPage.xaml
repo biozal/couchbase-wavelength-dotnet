@@ -71,13 +71,6 @@
                                 Style="{DynamicResource CaptionStyle}" 
 			                    TextColor="{StaticResource PageTextColor}"
                                 FontSize="16" />
-                            <Label 
-                                Text="{Binding StartTime, Converter={StaticResource DateTimeOffsetConverter}}" 
-                                LineBreakMode="NoWrap" 
-                                Style="{DynamicResource CaptionStyle}" 
-			                    TextColor="{StaticResource PageTextColor}"
-                                FontSize="16" />
-                            
                         </StackLayout>
                         <StackLayout.GestureRecognizers>
                             <TapGestureRecognizer 

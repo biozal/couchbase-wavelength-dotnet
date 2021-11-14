@@ -3,7 +3,7 @@ using Wavelength.Models;
 
 namespace Wavelength.Repository
 {
-    public interface IAuctionItemRepository
+    public interface IAuctionHttpRepository
     {
         Task<AuctionItems> GetItemsAsync(bool forceRefresh = false);
     }

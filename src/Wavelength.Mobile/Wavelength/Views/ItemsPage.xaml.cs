@@ -1,15 +1,7 @@
-﻿using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Wavelength.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
-using Wavelength.Models;
-using Wavelength.Views;
-using Wavelength.ViewModels;
 
 namespace Wavelength.Views
 {
@@ -20,8 +12,11 @@ namespace Wavelength.Views
         public ItemsPage()
         {
             InitializeComponent();
-            BindingContext = _viewModel = new ItemsViewModel();
+            _viewModel = Startup.ServiceProvider.GetService<ItemsViewModel>(); 
+            BindingContext = _viewModel;
         }
+
+   
 
         protected override void OnAppearing()
         {

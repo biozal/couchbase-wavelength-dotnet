@@ -7,10 +7,14 @@
     -->
     <Application.Resources>
         <ResourceDictionary>
+	        <!-- fonts, colors, and themeing -->
             <Color x:Key="Primary">#212121</Color>
             <Color x:Key="PrimaryMenuItem">#c1c1c1</Color>
 	        <Color x:Key="PageBackgroundColor">#303030</Color>
 	        <Color x:Key="PageTextColor">#BBB</Color>
+            <Color x:Key="CellBackgroundColor">#1C1C1E</Color>
+            <Color x:Key="SeparatorBackgroundColor">#505050</Color>
+            <Color x:Key="LabelLinkSettingsTextColor">#0A7AFF</Color>
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="White"></Setter>
                 <Setter Property="VisualStateManager.VisualStateGroups">
@@ -30,6 +34,7 @@
                     </VisualStateGroupList>
                 </Setter>
             </Style>
+
         </ResourceDictionary>        
     </Application.Resources>
 </Application>

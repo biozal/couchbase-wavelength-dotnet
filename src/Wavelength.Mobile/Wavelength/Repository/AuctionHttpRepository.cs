@@ -8,13 +8,13 @@ using Wavelength.Services;
 
 namespace Wavelength.Repository
 {
-    public class AuctionItemRepository
-        : IAuctionItemRepository
+    public class AuctionHttpRepository
+        : IAuctionHttpRepository
     {
         private readonly HttpClient _httpClient;
-
-        public AuctionItemRepository(
-	        IHttpClientFactory httpClientFactory)
+        
+        public AuctionHttpRepository(
+	        Services.IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClientFactory.GetHttpClient();
         }
