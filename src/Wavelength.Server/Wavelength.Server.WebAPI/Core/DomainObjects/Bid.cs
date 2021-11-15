@@ -10,6 +10,7 @@ namespace Wavelength.Core.DomainObjects
         public Guid BidId { get; set; }
         public Guid AuctionId { get; set; }
         public DateTimeOffset Received { get; set; }
+        public DateTimeOffset Sent { get; set; }
         public string LocationName { get; set; } = string.Empty;
 
         public DataAccessObjects.BidDAO ToBidDAO()
@@ -21,6 +22,7 @@ namespace Wavelength.Core.DomainObjects
                 BidId = BidId,
                 AuctionId = AuctionId,
                 Received = Received,
+                Sent = Sent,
                 LocationName = LocationName,
                 PerformanceMetrics = new Models.Metrics() 
             };
