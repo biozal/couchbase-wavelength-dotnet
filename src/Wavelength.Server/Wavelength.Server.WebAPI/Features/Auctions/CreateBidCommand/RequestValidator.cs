@@ -19,6 +19,10 @@ namespace Wavelength.Server.WebAPI.Features.Auction.CreateBidCommand
             RuleFor(r => r.BidId)
                 .NotEmpty()
                 .NotNull();
+            
+            RuleFor(r => r.Sent)
+                .NotEmpty()
+                .NotNull();
         }
     }
 }

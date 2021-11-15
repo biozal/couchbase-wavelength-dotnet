@@ -19,6 +19,10 @@ namespace Wavelength.Server.WebAPI.Features.Auction.CreateBidCommand
         //BidId - unique to make a bid, but can have bids from different locations
         [FromBody]
         public Guid BidId { get; set; }  
+        
+        //Sent - when request was sent from mobile client
+        [FromBody]
+        public DateTimeOffset Sent { get; set; }
 
         public DateTimeOffset Received { get; private set; } = DateTimeOffset.UtcNow;
     }

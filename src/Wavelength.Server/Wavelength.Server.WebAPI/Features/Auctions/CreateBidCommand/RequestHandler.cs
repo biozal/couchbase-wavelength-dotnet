@@ -56,7 +56,8 @@ namespace Wavelength.Server.WebAPI.Features.Auction.CreateBidCommand
                 DeviceId = request.DeviceId,
                 IsActive = true,
                 LocationName = location,
-                Received = request.Received
+                Received = request.Received,
+                Sent = request.Sent
             };
             var results = await _bidRepository.CreateBid(documentId.ToString(), bid);
             var dao = bid.ToBidDAO();
