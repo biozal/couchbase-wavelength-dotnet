@@ -174,6 +174,7 @@ namespace Wavelength.Server.WebAPI.Features.Auctions
 
 		private IActionResult DealWithErrors(Exception ex) 
 		{
+			Console.WriteLine($"Error: {ex.Message} StackTrace: {ex.StackTrace}");
 			switch (_hostEnvironment.EnvironmentName)
 			{
 				case Constants.Environments.Development:

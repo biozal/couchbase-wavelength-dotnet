@@ -7,6 +7,7 @@ using Wavelength.Core.DataAccessObjects;
 using Wavelength.Core.DomainObjects;
 using Wavelength.Core.Models;
 using Wavelength.Server.WebAPI.Repositories;
+using Wavelength.Server.WebAPI.Services;
 
 namespace Wavelength.Server.WebAPI.Features.Auction.CreateBidCommand
 {
@@ -17,13 +18,12 @@ namespace Wavelength.Server.WebAPI.Features.Auction.CreateBidCommand
         private readonly IBidRepository _bidRepository;
     
         public RequestHandler(
-            IConfiguration configuration,
+            ICouchbaseConfigService configService,
             IBidRepository bidRepository)
             
         {
-            _bidRepository = bidRepository; 
-            _couchbaseConfig = new CouchbaseConfig();
-            configuration.GetSection(CouchbaseConfig.Section).Bind(_couchbaseConfig);
+            _bidRepository = bidRepository;
+            _couchbaseConfig = configService.Config;
         }
 
         public async Task<BidDAO> Handle(
