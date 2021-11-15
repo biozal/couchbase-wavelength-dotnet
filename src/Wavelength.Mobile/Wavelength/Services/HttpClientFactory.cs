@@ -4,13 +4,13 @@ using System.Net.Http.Headers;
 
 namespace Wavelength.Services
 {
-    public class DebugHttpClientFactory
+    public class HttpClientFactory
         : IHttpClientFactory
     {
         private readonly IHttpClientHandlerFactory _httpClientHandlerFactory;
         private HttpClient _httpClient;
 
-        public DebugHttpClientFactory(
+        public HttpClientFactory(
 	        IHttpClientHandlerFactory httpClientHandlerFactory)
         {
             _httpClientHandlerFactory = httpClientHandlerFactory;

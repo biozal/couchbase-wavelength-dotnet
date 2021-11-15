@@ -32,14 +32,8 @@
                         BackgroundColor="{StaticResource CellBackgroundColor}"
                         CornerRadius="18"
                         HasShadow="false"
-                        HeightRequest="250">
+                        HeightRequest="235">
                         <StackLayout Padding="10" x:DataType="model:AuctionItem">
-                            <Label Text="{Binding Title}" 
-                                LineBreakMode="NoWrap" 
-                                Style="{DynamicResource TitleStyle}" 
-                                TextColor="{StaticResource PageTextColor}"
-                                Margin="0, 0, 0, 6"
-                                FontSize="16" />
                             <Image Aspect="AspectFit" HeightRequest="160">
                                 <Image.Source>
                                     <UriImageSource 
@@ -49,12 +43,18 @@
                                     </UriImageSource>   
                                 </Image.Source>
                             </Image>   
+                            <Label Text="{Binding Title}" 
+                                   LineBreakMode="NoWrap" 
+                                   Style="{DynamicResource TitleStyle}" 
+                                   TextColor="{StaticResource PageTextColor}"
+                                   Margin="0, 2, 0, 2"
+                                   FontSize="16" />
                             <StackLayout 
                                 x:DataType="model:AuctionItem"
-                                Margin="0, 5, 0, 25"
+                                Margin="0, 0, 0, 25"
                                 Orientation="Horizontal">
                                 <Label 
-                                    Padding="5, 0, 2, 0"
+                                    Padding="2, 0, 2, 0"
                                     LineBreakMode="NoWrap" 
                                     Text="Ends: "
                                     Style="{DynamicResource CaptionStyle}" 

@@ -43,7 +43,7 @@ namespace Wavelength.Droid
         {
 #if (DEBUG)
 	        services.AddSingleton<IHttpClientHandlerFactory, HttpClientHandlerAndroidDebugFactory>();
-	        services.AddSingleton<Wavelength.Services.IHttpClientFactory, DebugHttpClientFactory>();
+	        services.AddSingleton<Wavelength.Services.IHttpClientFactory, HttpClientFactory>();
 	        services.AddSingleton<IAuctionHttpRepository, AuctionHttpRepository>();
 #endif
 			services.AddSingleton<IConnectivityService, ConnectivityService>();

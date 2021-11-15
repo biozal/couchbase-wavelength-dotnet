@@ -21,7 +21,7 @@ namespace Wavelength.Repository
         private readonly IQuery _queryAuctions;
         private ListenerToken _queryAuctionsToken;
 
-        private readonly IQuery _queryBidsOnAuction;
+        private IQuery _queryBidsOnAuction;
         private ListenerToken _queryBidsOnAuctionToken;
         
         private readonly IQuery _queryAuctionCount;
@@ -40,17 +40,12 @@ namespace Wavelength.Repository
             
             //setup auction live queries
             _queryAuctions = _databaseService.AuctionDatabase.CreateQuery(@"SELECT * FROM _ as AuctionItem WHERE documentType = 'auction'");
-            //_queryBidsOnAuction = _databaseService.AuctionDatabase.CreateQuery(@"SELECT * FROM _ as BidItem WHERE documentType = 'bid' AND auctionId = $auctionId");
-            _queryBidsOnAuction = QueryBuilder.Select(SelectResult.All())
-                                        .From(DataSource.Database(_databaseService.AuctionDatabase))
-                                        .Where(Expression.Property("documentType").EqualTo(Expression.String("bid"))
-                                            .And(Expression.Property("auctionId")));
+
             //setup counts for information screens
             _queryAuctionCount = _databaseService.AuctionDatabase.CreateQuery(@"SELECT COUNT(*) FROM _ as Total WHERE documentType='auction'");
             _queryBidCount = _databaseService.AuctionDatabase.CreateQuery(@"SELECT COUNT(*) FROM _ as Total WHERE documentType='bid'");
         }
         
-               
         // **
         // ** Auction Section - used for Live Queries for Auctions and Bids 
         // ** 
@@ -69,7 +64,7 @@ namespace Wavelength.Repository
                         items.Add(auctionItem);   
                     }
                 } 
-                onAuctionItemUpdate.Execute(items);
+                onAuctionItemUpdate.Execute(items.OrderBy(x=>x.StopTime));
             });
         }
 
@@ -80,11 +75,11 @@ namespace Wavelength.Repository
 
         public void RegisterBidsLiveQuery(Command<IEnumerable<Bid>> onBidItemsUpdate, string auctionId)
         {
-            //set parameter, the query should only be created once for performance reasons and 
-            //the parameter set as needed
-            var parameters = new Parameters();
-            parameters.SetString("auctionId", auctionId);
-            _queryBidCount.Parameters = parameters;
+            //can't cache because this needs to change all the time between screens
+            _queryBidsOnAuction = QueryBuilder.Select(SelectResult.All())
+                .From(DataSource.Database(_databaseService.AuctionDatabase))
+                .Where(Expression.Property("documentType").EqualTo(Expression.String("bid"))
+                    .And(Expression.Property("auctionId").EqualTo(Expression.String(auctionId))));
             
             //handle live query
             _queryBidCountToken = _queryBidsOnAuction.AddChangeListener((o, args) =>
@@ -97,16 +92,20 @@ namespace Wavelength.Repository
                     var bidItem = JsonConvert.DeserializeObject<BidDao>(json)?.Auctions;
                     if (bidItem is not null)
                     {
+                        TimeSpan ts = bidItem.Received - bidItem.Sent;
+                        bidItem.TimeSpan = $"{ts.TotalMilliseconds} ms";
                         items.Add(bidItem);
                     }
                 }
-                onBidItemsUpdate.Execute(items);
+                onBidItemsUpdate.Execute(items.OrderBy(x=>x.Sent));
             });
         }
 
         public void DeRegisterBidsLiveQuery(string auctionId)
         {
-            _queryBidCount.RemoveChangeListener(_queryBidsOnAuctionToken);    
+            _queryBidsOnAuction.RemoveChangeListener(_queryBidsOnAuctionToken);    
+            _queryBidsOnAuction.Dispose();
+            _queryBidsOnAuction = null;
         }
         
         
@@ -144,7 +143,7 @@ namespace Wavelength.Repository
 
         public void DeregisterBidCount()
         {
-            _queryAuctionCount.RemoveChangeListener(_queryBidCountToken);
+            _queryBidCount.RemoveChangeListener(_queryBidCountToken);
         }
     }
 }

@@ -58,6 +58,7 @@ namespace Wavelength.ViewModels
             set => SetProperty(ref _displayStopTime, value);
         }
         
+        public Command BidOnItemCommand { get; }
         public Command<IEnumerable<Bid>> BidItemsUpdateCommand { get;  }
         public ObservableCollection<Bid> Items { get; private set; }
 
@@ -66,8 +67,8 @@ namespace Wavelength.ViewModels
             Items = new ObservableCollection<Bid>();
             _auctionRepository = Startup.ServiceProvider.GetService<ICBLiteAuctionRepository>();
             
-            //setup live query
             BidItemsUpdateCommand = new Command<IEnumerable<Bid>>(OnBidItemsUpdate);
+            BidOnItemCommand = new Command(OnBidOnItem);
         }
         
         public void OnDisappearing()
@@ -91,7 +92,7 @@ namespace Wavelength.ViewModels
                 //set UI items
                 Text = _auctionItem.Title;
                 ImageUrl = _auctionItem.ImageUrl;
-                DisplayStopTime = $"Stop Time: {_auctionItem.StopTime.Humanize()}";
+                DisplayStopTime = $"Ends {_auctionItem.StopTime.Humanize()}";
                 
             }
             catch (Exception)
@@ -114,6 +115,10 @@ namespace Wavelength.ViewModels
                 Items.Add(item);   
             }
             IsBusy = false;
+        }
+        
+        private void OnBidOnItem()
+        {
         }
     }
 }

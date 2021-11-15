@@ -10,19 +10,19 @@
              BackgroundColor="Black"
              Visual="Material">
     <ContentPage.Resources>
-        <converters:DateTimeOffsetToHumanizerString x:Key="DateTimeHumanizer"/>
+        <converters:DateTimeOffsetToString x:Key="DateTimeString"/>
     </ContentPage.Resources>
-    <StackLayout Spacing="10" Padding="16, 10, 16, 10">
-        <Label 
-            TextColor="{StaticResource PageTextColor}"
-            Text="{Binding Text}" 
-            Style="{DynamicResource TitleStyle}" 
-            FontSize="Large"/>
-        <Image Aspect="AspectFit" HeightRequest="160">
+    <StackLayout Spacing="10" Padding="16, 10, 16, 10" x:DataType="local:ItemDetailViewModel">
+        <Image Aspect="AspectFit" HeightRequest="120">
             <Image.Source>
                 <UriImageSource Uri="{Binding ImageUrl}" CacheValidity="14" CachingEnabled="true"></UriImageSource>   
             </Image.Source>
         </Image>   
+        <Label 
+            TextColor="{StaticResource PageTextColor}"
+            Text="{Binding Text}" 
+            Style="{DynamicResource SubtitleStyle}" 
+            FontSize="Large"/>
         <Label Text="{Binding DisplayStopTime}" 
                LineBreakMode="NoWrap"
                Style="{DynamicResource CaptionStyle}"
@@ -31,9 +31,20 @@
         <Button
             Margin="0, 10, 0, 0"
             Text="Bid"
+            Command="{Binding BidOnItemCommand}"
             BackgroundColor="{StaticResource CouchbaseRedBackgroundColor}"
             TextColor="White">
         </Button>
+        <BoxView 
+            HeightRequest="1" 
+            Margin="4, 12, 0, 4" 
+            Color="{StaticResource SeparatorBackgroundColor}">
+        </BoxView>
+        <Label Text="Bids"
+               LineBreakMode="NoWrap"
+               Style="{DynamicResource CaptionStyle}"
+               TextColor="{StaticResource PageTextColor}"
+               FontSize="Medium" />
         <CollectionView
             x:DataType="local:ItemDetailViewModel"
             x:Name="BidsCollectionView"
@@ -41,13 +52,128 @@
             SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Padding="10" x:DataType="model:Bid">
-                        <Label Text="{Binding DeviceId}" 
-                               LineBreakMode="NoWrap" 
-                               Style="{DynamicResource TitleStyle}" 
-                               TextColor="{StaticResource PageTextColor}"
-                               Margin="0, 0, 0, 6"
-                               FontSize="16" />
+                    <StackLayout
+                        Margin="0, 5, 0, 5">
+                        <Frame
+                            BackgroundColor="{StaticResource CellBackgroundColor}"
+                            VerticalOptions="StartAndExpand"
+                            CornerRadius="12"
+                            HeightRequest="140"
+                            Margin="8, 10, 8, 10"
+                            HasShadow="false">
+                            <StackLayout
+                                VerticalOptions="StartAndExpand">
+                                <StackLayout 
+                                    Orientation="Horizontal"
+                                    VerticalOptions="StartAndExpand"
+                                    x:DataType="model:Bid">
+                                    <Label
+                                        Text="Location"
+                                        LineBreakMode="NoWrap" 
+                                        HorizontalTextAlignment="Start"
+                                        VerticalTextAlignment="Center"
+                                        Style="{DynamicResource CaptionStyle}" 
+                                        TextColor="{StaticResource PageTextColor}"
+                                        FontSize="14"
+                                        />
+                                    <Label Text="{Binding LocationName}" 
+                                           LineBreakMode="CharacterWrap"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="End"
+                                           HorizontalOptions="EndAndExpand"
+                                           Style="{DynamicResource CaptionStyle}" 
+                                           TextColor="{StaticResource PageTextColor}"
+                                           Margin="8, 0, 0, 0"
+                                           FontSize="14" />
+                                </StackLayout>
+                                <BoxView 
+                                    HeightRequest="1" 
+                                    Margin="1, 4, 0, 4" 
+                                    Color="{StaticResource SeparatorBackgroundColor}">
+                                </BoxView>
+                                <StackLayout 
+                                    Orientation="Horizontal"
+                                    VerticalOptions="StartAndExpand"
+                                    x:DataType="model:Bid">
+                                    <Label
+                                        Text="Sent"
+                                        LineBreakMode="NoWrap" 
+                                        HorizontalTextAlignment="Start"
+                                        VerticalTextAlignment="Center"
+                                        Style="{DynamicResource CaptionStyle}" 
+                                        TextColor="{StaticResource PageTextColor}"
+                                        FontSize="14"
+                                    />
+                                    <Label Text="{Binding Sent, 
+                                        Converter={StaticResource DateTimeString} }" 
+                                        LineBreakMode="CharacterWrap"
+                                        VerticalTextAlignment="Center"
+                                        HorizontalTextAlignment="End"
+                                        HorizontalOptions="EndAndExpand"
+                                        Style="{DynamicResource CaptionStyle}" 
+                                        TextColor="{StaticResource PageTextColor}"
+                                        Margin="4, 0, 0, 0"
+                                        FontSize="14" />
+                                </StackLayout>
+                                <BoxView 
+                                    HeightRequest="1" 
+                                    Margin="1, 4, 0, 4" 
+                                    Color="{StaticResource SeparatorBackgroundColor}">
+                                </BoxView>
+                                <StackLayout 
+                                    Orientation="Horizontal"
+                                    VerticalOptions="StartAndExpand"
+                                    x:DataType="model:Bid">
+                                    <Label
+                                        Text="Received"
+                                        LineBreakMode="NoWrap" 
+                                        HorizontalTextAlignment="Start"
+                                        VerticalTextAlignment="Center"
+                                        Style="{DynamicResource CaptionStyle}" 
+                                        TextColor="{StaticResource PageTextColor}"
+                                        FontSize="14"
+                                    />
+                                    <Label Text="{Binding Received, 
+                                        Converter={StaticResource DateTimeString} }" 
+                                           LineBreakMode="CharacterWrap"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="End"
+                                           HorizontalOptions="EndAndExpand"
+                                           Style="{DynamicResource CaptionStyle}" 
+                                           TextColor="{StaticResource PageTextColor}"
+                                           Margin="4, 0, 0, 0"
+                                           FontSize="14" />
+                                </StackLayout>
+                                <BoxView 
+                                    HeightRequest="1" 
+                                    Margin="1, 4, 0, 4" 
+                                    Color="{StaticResource SeparatorBackgroundColor}">
+                                </BoxView>
+                                <StackLayout 
+                                    Orientation="Horizontal"
+                                    VerticalOptions="StartAndExpand"
+                                    x:DataType="model:Bid">
+                                    <Label
+                                        Text="Est Latency"
+                                        LineBreakMode="NoWrap" 
+                                        HorizontalTextAlignment="Start"
+                                        VerticalTextAlignment="Center"
+                                        Style="{DynamicResource CaptionStyle}" 
+                                        TextColor="{StaticResource PageTextColor}"
+                                        FontSize="14"
+                                    />
+                                    <Label Text="{Binding TimeSpan}" 
+                                           LineBreakMode="CharacterWrap"
+                                           VerticalTextAlignment="Center"
+                                           HorizontalTextAlignment="End"
+                                           HorizontalOptions="EndAndExpand"
+                                           Style="{DynamicResource CaptionStyle}" 
+                                           TextColor="{StaticResource PageTextColor}"
+                                           Margin="4, 0, 0, 0"
+                                           FontSize="14" />
+                                </StackLayout>
+                            </StackLayout>
+                        </Frame>
                     </StackLayout>
                 </DataTemplate>  
            </CollectionView.ItemTemplate>

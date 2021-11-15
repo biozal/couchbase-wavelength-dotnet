@@ -52,6 +52,7 @@ namespace Wavelength
         {
             services.AddSingleton<ICBLiteDatabaseService, CBLiteDatabaseService>();
             services.AddSingleton<ICBLiteAuctionRepository, CBLiteAuctionRepository>();
+            services.AddSingleton<IAuctionHttpRepository, AuctionHttpRepository>();
             
             //setup viewmodels
             services.AddTransient<AboutViewModel>();

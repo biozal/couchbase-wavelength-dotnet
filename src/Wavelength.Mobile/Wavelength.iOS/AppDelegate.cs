@@ -42,8 +42,7 @@ namespace Wavelength.iOS
         {
 #if (DEBUG)
             services.AddSingleton<IHttpClientHandlerFactory, HttpClientHandlerIOSDebugFactory>();
-            services.AddSingleton<IHttpClientFactory, DebugHttpClientFactory>();
-            services.AddSingleton<IAuctionHttpRepository, AuctionHttpRepository>();
+            services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
 #endif
             services.AddSingleton<IConnectivityService, ConnectivityService>();
         }
