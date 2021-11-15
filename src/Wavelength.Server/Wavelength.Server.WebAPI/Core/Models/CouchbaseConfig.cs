@@ -33,5 +33,6 @@ namespace Wavelength.Core.Models
         public string? SyncGatewayUsername { get; set; }
         public string? SyncGatewayPassword { get; set; }
         public string? ClosingCode { get; set; }
+        public bool DurabilityPersistToMajority { get; set; }
     }
 }

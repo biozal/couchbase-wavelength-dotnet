@@ -44,7 +44,8 @@ namespace Wavelength.Server.WebAPI.Features.Environment.GetEnvironmentQuery
                 Mode = _couchbaseConfig.Mode ?? string.Empty,
                 Name = _couchbaseConfig.Location ?? string.Empty,
                 ScopeName = _couchbaseConfig.ScopeName ?? string.Empty,
-                SyncGatewayUri = _couchbaseConfig.SyncGatewayUri ?? String.Empty    
+                SyncGatewayUri = _couchbaseConfig.SyncGatewayUri ?? string.Empty,
+                IsDurabilityPersistToMajority = _couchbaseConfig.DurabilityPersistToMajority
             };
         }
     }
