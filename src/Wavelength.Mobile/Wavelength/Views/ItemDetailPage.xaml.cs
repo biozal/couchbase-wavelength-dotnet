@@ -6,10 +6,18 @@ namespace Wavelength.Views
 {
     public partial class ItemDetailPage : ContentPage
     {
+        private readonly ItemDetailViewModel _viewModel;
         public ItemDetailPage()
         {
             InitializeComponent();
-            BindingContext = new ItemDetailViewModel();
+            _viewModel = new ItemDetailViewModel();
+            BindingContext = _viewModel;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _viewModel.OnDisappearing(); 
         }
     }
 }

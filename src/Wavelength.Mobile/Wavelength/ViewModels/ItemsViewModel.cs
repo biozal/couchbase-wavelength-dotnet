@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -19,51 +20,51 @@ namespace Wavelength.ViewModels
         private readonly ICBLiteAuctionRepository _auctionRepository;
 
         private AuctionItem _selectedItem;
-
+        
+        public Command<IEnumerable<AuctionItem>> AuctionItemsUpdatedCommand { get; }
         public ObservableCollection<AuctionItem> Items { get; }
-        public Command LoadItemsCommand { get; }
         public Command<AuctionItem> ItemTapped { get; }
 
         public ItemsViewModel(ICBLiteAuctionRepository auctionRepository)
         {
             Title = "Auctions";
-
             _auctionRepository = auctionRepository;
-             
             _auctionHttpRepository = DependencyService.Get<IAuctionHttpRepository>();
             Items = new ObservableCollection<AuctionItem>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-
+            
+            //setup live query 
+            AuctionItemsUpdatedCommand = new Command<IEnumerable<AuctionItem>>(OnAuctionItemsUpdate);
+            _auctionRepository.RegisterAuctionLiveQuery(AuctionItemsUpdatedCommand); 
+            
+            //handle navigation when item is selected
             ItemTapped = new Command<AuctionItem>(OnItemSelected);
         }
 
-        async Task ExecuteLoadItemsCommand()
+        private void OnAuctionItemsUpdate(IEnumerable<AuctionItem> auctionItems)
         {
             IsBusy = true;
-
-            try
+            //clear out previous items
+            if (Items.Count > 0)
             {
                 Items.Clear();
-                var results  = await _auctionHttpRepository.GetItemsAsync(true);
-                foreach (var item in results.Items)
-                {
-                    Items.Add(item);
-                }
             }
-            catch (Exception ex)
+            //add items
+            foreach (var item in auctionItems)
             {
-                Debug.WriteLine(ex);
+                Items.Add(item);
             }
-            finally
-            {
-                IsBusy = false;
-            }
+            IsBusy = false;
         }
-
+        
         public void OnAppearing()
         {
-            IsBusy = true;
             SelectedItem = null;
+            _auctionRepository.RegisterAuctionLiveQuery(AuctionItemsUpdatedCommand);
+        }
+
+        public void OnDisappearing()
+        {
+            _auctionRepository.DeRegisterAuctionLiveQuery();    
         }
 
         public AuctionItem SelectedItem

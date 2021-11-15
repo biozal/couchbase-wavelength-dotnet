@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Couchbase.Lite.Enterprise" Version="3.0.0-beta02" />
+    <PackageReference Include="Humanizer.Core" Version="2.11.10" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="1.3.0" />
@@ -30,7 +31,6 @@
     <None Remove="Controls\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Converters" />
     <Folder Include="Constants\" />
     <Folder Include="Repository\" />
     <Folder Include="Resources\" />

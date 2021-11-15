@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Wavelength.ViewModels;
+﻿using Wavelength.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -7,7 +6,7 @@ namespace Wavelength.Views
 {
     public partial class ItemsPage : ContentPage
     {
-        ItemsViewModel _viewModel;
+        private readonly ItemsViewModel _viewModel;
 
         public ItemsPage()
         {
@@ -16,12 +15,17 @@ namespace Wavelength.Views
             BindingContext = _viewModel;
         }
 
-   
-
         protected override void OnAppearing()
         {
             base.OnAppearing();
             _viewModel.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _viewModel.OnDisappearing();
+            
         }
     }
 }

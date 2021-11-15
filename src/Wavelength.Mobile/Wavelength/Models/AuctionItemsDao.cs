@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 namespace Wavelength.Models
 {
-    public class AuctionItems
+    public class AuctionItemsDao
     {
         public IEnumerable<AuctionItem> Items { get; set; }
 

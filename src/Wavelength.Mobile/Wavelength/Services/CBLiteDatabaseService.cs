@@ -98,13 +98,21 @@ namespace Wavelength.Services
 	        if (AuctionDatabase is not null)
 	        {
 		        var indexes = AuctionDatabase.GetIndexes();
-		        if (!indexes.Contains("documentType"))
+		        if (!indexes.Contains(Indexes.DocumentType))
 		        {
-			        AuctionDatabase.CreateIndex(
-				        "typeIndex",
-						IndexBuilder.ValueIndex(ValueIndexItem.Expression(Expression.Property("documentType")))
-				        );
+					AuctionDatabase.CreateIndex(
+				        Constants.Indexes.DocumentType,
+						IndexBuilder.ValueIndex(ValueIndexItem.Expression(Expression.Property(ExpressionProperties.DocumentType)))
+					);
 		        }
+		        if (!indexes.Contains(Indexes.AuctionItemBids))
+		        {
+					var auctionBidsIndex = IndexBuilder.ValueIndex(
+						ValueIndexItem.Expression(Expression.Property(ExpressionProperties.DocumentType)),
+						ValueIndexItem.Expression(Expression.Property(ExpressionProperties.AuctionId))
+					);
+					AuctionDatabase.CreateIndex(Indexes.AuctionItemBids, auctionBidsIndex);
+				}
 
 		        IndexCount = AuctionDatabase.GetIndexes().Count.ToString();
 	        }

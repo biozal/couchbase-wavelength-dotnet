@@ -1,35 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:local="clr-namespace:Wavelength.ViewModels"  
+             xmlns:model="clr-namespace:Wavelength.Models"  
+             xmlns:converters="clr-namespace:Wavelength.Converters;assembly=Wavelength"
              x:Class="Wavelength.Views.ItemDetailPage"
+             x:Name="AuctionItemsDetailPage"
              Title="{Binding Title}"
-             BackgroundColor="{StaticResource PageBackgroundColor}"
+             BackgroundColor="Black"
              Visual="Material">
-
-    <StackLayout Spacing="20" Padding="15">
+    <ContentPage.Resources>
+        <converters:DateTimeOffsetToHumanizerString x:Key="DateTimeHumanizer"/>
+    </ContentPage.Resources>
+    <StackLayout Spacing="10" Padding="16, 10, 16, 10">
         <Label 
             TextColor="{StaticResource PageTextColor}"
             Text="{Binding Text}" 
             Style="{DynamicResource TitleStyle}" 
             FontSize="Large"/>
-        
         <Image Aspect="AspectFit" HeightRequest="160">
             <Image.Source>
                 <UriImageSource Uri="{Binding ImageUrl}" CacheValidity="14" CachingEnabled="true"></UriImageSource>   
             </Image.Source>
         </Image>   
-
-        <Label Text="{Binding DisplayStartTime}" 
-               LineBreakMode="NoWrap"
-               Style="{DynamicResource CaptionStyle}"
-               TextColor="{StaticResource PageTextColor}"
-               FontSize="Medium" />
         <Label Text="{Binding DisplayStopTime}" 
                LineBreakMode="NoWrap"
                Style="{DynamicResource CaptionStyle}"
                TextColor="{StaticResource PageTextColor}"
                FontSize="Medium" />
+        <Button
+            Margin="0, 10, 0, 0"
+            Text="Bid"
+            BackgroundColor="{StaticResource CouchbaseRedBackgroundColor}"
+            TextColor="White">
+        </Button>
+        <CollectionView
+            x:DataType="local:ItemDetailViewModel"
+            x:Name="BidsCollectionView"
+            ItemsSource="{Binding Items}"
+            SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout Padding="10" x:DataType="model:Bid">
+                        <Label Text="{Binding DeviceId}" 
+                               LineBreakMode="NoWrap" 
+                               Style="{DynamicResource TitleStyle}" 
+                               TextColor="{StaticResource PageTextColor}"
+                               Margin="0, 0, 0, 6"
+                               FontSize="16" />
+                    </StackLayout>
+                </DataTemplate>  
+           </CollectionView.ItemTemplate>
+        </CollectionView>
     </StackLayout>
-    
 </ContentPage>

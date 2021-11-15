@@ -19,7 +19,7 @@ namespace Wavelength.Repository
             _httpClient = httpClientFactory.GetHttpClient();
         }
 
-        public async Task<AuctionItems> GetItemsAsync(bool forceRefresh = false)
+        public async Task<AuctionItemsDao> GetItemsAsync(bool forceRefresh = false)
         {
             var uri = new Uri(Constants.RestUri.GetAuctions, UriKind.Relative);
             var request = new HttpRequestMessage
@@ -41,7 +41,7 @@ namespace Wavelength.Repository
                 if (response.IsSuccessStatusCode)
                 {
                     var json = await response.Content.ReadAsStringAsync();
-                    var results = JsonConvert.DeserializeObject<AuctionItems>(json);
+                    var results = JsonConvert.DeserializeObject<AuctionItemsDao>(json);
                     results.NetworkOverheadTime = stopWatch.Elapsed.TotalMilliseconds - results.ApiOverheadTime;
                     return results;
                 }
@@ -51,7 +51,7 @@ namespace Wavelength.Repository
                 //todo logging
                 throw ex;
             }
-            return new AuctionItems();
+            return new AuctionItemsDao();
         }
     }
 }
