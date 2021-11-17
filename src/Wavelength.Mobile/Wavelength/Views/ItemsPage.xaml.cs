@@ -10,9 +10,16 @@ namespace Wavelength.Views
 
         public ItemsPage()
         {
-            InitializeComponent();
-            _viewModel = Startup.ServiceProvider.GetService<ItemsViewModel>(); 
-            BindingContext = _viewModel;
+            try
+            {
+                InitializeComponent();
+                _viewModel = Startup.ServiceProvider.GetService<ItemsViewModel>();
+                BindingContext = _viewModel;
+            }
+            catch (System.Exception ex) 
+	        {
+                System.Console.WriteLine($"{ex.Message} {ex.StackTrace}");
+	        }
         }
 
         protected override void OnAppearing()

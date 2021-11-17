@@ -93,6 +93,7 @@ namespace Wavelength.Repository
                     if (bidItem is not null)
                     {
                         TimeSpan ts = bidItem.Received - bidItem.Sent;
+                        bidItem.TimeSpanRaw = ts.TotalMilliseconds;
                         bidItem.TimeSpan = $"{ts.TotalMilliseconds} ms";
                         items.Add(bidItem);
                     }

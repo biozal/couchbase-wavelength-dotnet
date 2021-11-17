@@ -30,6 +30,7 @@ namespace Wavelength.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
             global::Xamarin.Forms.FormsMaterial.Init();
             var formsApp = new App();
             Startup.Init(ConfigureServices, formsApp.RegisterServices);

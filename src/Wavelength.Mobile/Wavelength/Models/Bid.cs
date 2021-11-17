@@ -13,7 +13,18 @@ namespace Wavelength.Models
         public DateTimeOffset Received { get; set; } 
         public DateTimeOffset Sent { get; set; } 
         public string TimeSpan { get; set; }
+        public double TimeSpanRaw { get; set; }
         public string LocationName { get; set; }
         public bool IsActive { get; set; }
+
+        public BidDto ToBidDTO()
+        {
+            return new BidDto()
+            {
+                DeviceId = DeviceId,
+                BidId =  BidId,
+                Id = AuctionId.ToString()
+            };
+        }
     }
 }

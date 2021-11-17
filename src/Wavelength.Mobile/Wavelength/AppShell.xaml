@@ -88,7 +88,7 @@
         <ShellContent Route="InformationPage" ContentTemplate="{DataTemplate local:InformationPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="About Wavelength" Icon="{x:Static fontAwesome:FontAwesomeIcons.InfoCircle}">
+    <FlyoutItem Title="About Couchbid" Icon="{x:Static fontAwesome:FontAwesomeIcons.InfoCircle}">
         <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
     </FlyoutItem>
     
@@ -141,7 +141,7 @@
          <Grid
             HeightRequest="{x:OnPlatform Android=50}"
             ColumnSpacing="{x:OnPlatform UWP=0}"
-            RowSpacing="{x:OnPlatform UWP=0}">
+            RowSpacing="{x:OnPlatform UWP=0, iOS=40, Android=40}">
              <VisualStateManager.VisualStateGroups>
                  <VisualStateGroupList>
                      <VisualStateGroup 
@@ -176,7 +176,7 @@
             </Grid.ColumnDefinitions>
              <Image 
                 VerticalOptions="Center"
-		        Margin="0, 8"
+		        Margin="0, 16"
                 HorizontalOptions="{x:OnPlatform Default=Center, UWP=Start}"
                 HeightRequest="{x:OnPlatform Android=24, iOS=22, UWP=16}"
                 WidthRequest="{x:OnPlatform Android=24, iOS=22, UWP=16}">
@@ -192,7 +192,7 @@
 		        x:Name="FlyoutItemLabel"
                 Grid.Column="1"        
                 Text="{Binding Title}"
-                FontSize="{x:OnPlatform Android=14, iOS=Small}"
+                FontSize="{x:OnPlatform Android=18, iOS=Medium}"
                 HorizontalOptions="{x:OnPlatform UWP=Start}"
                 HorizontalTextAlignment="{x:OnPlatform UWP=Start}"
                 FontAttributes="{x:OnPlatform iOS=Bold}"

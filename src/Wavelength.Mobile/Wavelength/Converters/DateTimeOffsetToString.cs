@@ -11,7 +11,7 @@ namespace Wavelength.Converters
         {
             if (value is DateTimeOffset dateTimeOffset)
             {
-                return dateTimeOffset.ToString("hh:mm:ss.fffffff");
+                return dateTimeOffset.ToLocalTime().ToString("hh:mm:ss.fffffff", CultureInfo.InvariantCulture);
             }
             return string.Empty;
         }

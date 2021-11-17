@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:Wavelength.ViewModels"  
              xmlns:model="clr-namespace:Wavelength.Models"  
              xmlns:converters="clr-namespace:Wavelength.Converters;assembly=Wavelength"
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              x:Class="Wavelength.Views.ItemsPage"
              x:Name="AuctionItemsPage"
              Title="{Binding Title}"
@@ -34,6 +35,15 @@
                         HasShadow="false"
                         HeightRequest="235">
                         <StackLayout Padding="10" x:DataType="model:AuctionItem">
+                            <ffimageloading:CachedImage
+                                HeightRequest="150"
+				                Source="{Binding ImageUrl}"
+                                CacheDuration="60"
+                                RetryCount="3"
+                                RetryDelay="100"
+                                DownsampleToViewSize="true">
+			                </ffimageloading:CachedImage>
+                            <!--
                             <Image Aspect="AspectFit" HeightRequest="160">
                                 <Image.Source>
                                     <UriImageSource 
@@ -43,6 +53,7 @@
                                     </UriImageSource>   
                                 </Image.Source>
                             </Image>   
+                            -->
                             <Label Text="{Binding Title}" 
                                    LineBreakMode="NoWrap" 
                                    Style="{DynamicResource TitleStyle}" 
@@ -82,5 +93,22 @@
 		        </Frame>
             </DataTemplate>
         </CollectionView.ItemTemplate>
+        <CollectionView.EmptyView>
+            <ContentView>
+                <StackLayout 
+		            HorizontalOptions="CenterAndExpand" 
+		            VerticalOptions="CenterAndExpand">
+                    <Label
+                        Margin="10, 25, 10, 10"
+                        FontAttributes="Bold"
+                        FontSize="18"
+                        HorizontalOptions="Fill"
+                        HorizontalTextAlignment="Center"
+                        TextColor="{StaticResource PageTextColor}"
+                        Text="No Auctions found at this time.  New auctions should automatically appear on this screen.">
+		            </Label>
+		        </StackLayout>
+	        </ContentView>
+	    </CollectionView.EmptyView>
     </CollectionView>
 </ContentPage>

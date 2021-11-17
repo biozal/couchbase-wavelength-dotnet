@@ -10,12 +10,14 @@ using Wavelength.Droid.Network;
 using Wavelength.Services;
 using Wavelength.Repository;
 using Wavelength.Droid.Services;
+using Couchbase.Lite;
+using System.IO;
 
 namespace Wavelength.Droid
 {
     [Activity(
-	    Label = "Wavelength Demo", 
-	    Icon = "@mipmap/icon", 
+	    Label = "Couchbid", 
+	    Icon = "@mipmap/ic_launcher_round", 
 	    Theme = "@style/MainTheme", 
 	    MainLauncher = true, 
 	    ConfigurationChanges = 
@@ -25,14 +27,17 @@ namespace Wavelength.Droid
 	        ConfigChanges.ScreenLayout | 
 	        ConfigChanges.SmallestScreenSize)]
     public class MainActivity 
-	    : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+	    : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity 
+			
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
 
-            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+			Couchbase.Lite.Support.Droid.Activate(this);
+			Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+			FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
 			var formsApp = new App();
             Startup.Init(ConfigureServices, formsApp.RegisterServices);
 			LoadApplication(formsApp);
@@ -46,7 +51,9 @@ namespace Wavelength.Droid
 	        services.AddSingleton<Wavelength.Services.IHttpClientFactory, HttpClientFactory>();
 	        services.AddSingleton<IAuctionHttpRepository, AuctionHttpRepository>();
 #endif
-			services.AddSingleton<IConnectivityService, ConnectivityService>();
+	        var pinnedCertService = new PinnedCertificateService(this.Assets);
+	        services.AddSingleton<IPinnedCertificateService>(pinnedCertService);
+	        services.AddSingleton<IConnectivityService, ConnectivityService>();
 		}
         
         public override void OnRequestPermissionsResult(

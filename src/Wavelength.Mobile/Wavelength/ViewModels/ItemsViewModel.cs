@@ -22,7 +22,7 @@ namespace Wavelength.ViewModels
         private AuctionItem _selectedItem;
         
         public Command<IEnumerable<AuctionItem>> AuctionItemsUpdatedCommand { get; }
-        public ObservableCollection<AuctionItem> Items { get; }
+        public ObservableCollection<AuctionItem> Items { get; private set; }
         public Command<AuctionItem> ItemTapped { get; }
 
         public ItemsViewModel(ICBLiteAuctionRepository auctionRepository)
@@ -34,7 +34,6 @@ namespace Wavelength.ViewModels
             
             //setup live query 
             AuctionItemsUpdatedCommand = new Command<IEnumerable<AuctionItem>>(OnAuctionItemsUpdate);
-            _auctionRepository.RegisterAuctionLiveQuery(AuctionItemsUpdatedCommand); 
             
             //handle navigation when item is selected
             ItemTapped = new Command<AuctionItem>(OnItemSelected);
@@ -42,18 +41,28 @@ namespace Wavelength.ViewModels
 
         private void OnAuctionItemsUpdate(IEnumerable<AuctionItem> auctionItems)
         {
-            IsBusy = true;
-            //clear out previous items
-            if (Items.Count > 0)
+            try
             {
-                Items.Clear();
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    IsBusy = true;
+                    Items.Clear();
+                    if (Items.Count > 0)
+                    {
+                        Items.Clear();
+                    }
+                    //add items
+                    foreach (var item in auctionItems)
+                    {
+                        Items.Add(item);
+                    }
+                    IsBusy = false;
+                });
             }
-            //add items
-            foreach (var item in auctionItems)
-            {
-                Items.Add(item);
-            }
-            IsBusy = false;
+            catch (Exception ex) 
+	        {
+                Console.WriteLine($"{ex.Message}");
+	        }
         }
         
         public void OnAppearing()

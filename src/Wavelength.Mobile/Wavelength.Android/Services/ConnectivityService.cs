@@ -55,7 +55,11 @@ namespace Wavelength.Droid.Services
                     new System.Threading.Thread(() =>
                     {
                         /* this line can take minutes when on wifi with poor or none internet connectivity
-                        and Task.Delay solves it only if this is running on new thread (Task.Run does not help) */
+                        and Task.Delay solves it only if this is running on new thread (Task.Run does not help) 
+			            Also depending on which android version you are running this might through an exception when it times out, 
+			            hence the try catch.  Yes I know - why can't it be consistant, but that's like asking how many licks 
+			            does it take to get to the center of a tooties roll pop - the world might never know...
+			            LABEAAA 11/16/2021  */
                         InetSocketAddress result = new InetSocketAddress(host, port);
 
                         if (!tcs.Task.IsCompleted)
@@ -85,8 +89,9 @@ namespace Wavelength.Droid.Services
                 catch (Exception ex)
                 {
                     Debug.WriteLine("Unable to reach: " + host + " Error: " + ex);
-                    return false;
                 }
+
+                return false;
             });
         }
     }

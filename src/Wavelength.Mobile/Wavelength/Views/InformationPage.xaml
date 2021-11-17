@@ -33,7 +33,7 @@
 					        Padding="16, 0, 0, 0"
 					        VerticalTextAlignment="Center"
 					        Text="DeviceId"
-					        Style="{DynamicResource SubtitleStyle}"
+							Style="{DynamicResource CaptionStyle}"
 					        TextColor="White">
 					        </Label>
 					    <Label 
@@ -43,7 +43,7 @@
 					        VerticalTextAlignment="Center"
 					        HorizontalTextAlignment="End"
 					        HorizontalOptions="EndAndExpand"
-					        Style="{DynamicResource ListItemDetailTextStyle}"
+							FontSize="Small"
 					        TextColor="{StaticResource PageTextColor}">
 				        </Label>
 			        </StackLayout>
@@ -70,17 +70,17 @@
                             Padding="16, 0, 0, 0"
                             VerticalTextAlignment="Center"
 			                Text="Location"
-                            Style="{DynamicResource SubtitleStyle}"
+					        Style="{DynamicResource CaptionStyle}"
                             TextColor="White">
 		                </Label>
                         <Label 
+							FontSize="Small"
                             Margin="2, 0, 16, 0"
 			                Text="{Binding DatacenterLocation}"
                             LineBreakMode="CharacterWrap"
                             VerticalTextAlignment="Center"
                             HorizontalTextAlignment="End"
                             HorizontalOptions="EndAndExpand"
-                            Style="{DynamicResource ListItemDetailTextStyle}"
                             TextColor="{StaticResource PageTextColor}">
                         </Label>
 		            </StackLayout>
@@ -90,22 +90,23 @@
 		                Color="{StaticResource SeparatorBackgroundColor}">
 		            </BoxView>
                     <StackLayout
+						HeightRequest="80"
 		                Orientation="Horizontal">
                         <Label 
                             Padding="16, 0, 0, 0"
                             VerticalTextAlignment="Center"
 			                Text="Sync Gateway"
-                            Style="{DynamicResource SubtitleStyle}"
+					        Style="{DynamicResource CaptionStyle}"
                             TextColor="White">
 		                </Label>
                         <Label 
-                            Margin="2, 0, 16, 0"
+							FontSize="10"
+                            Margin="1, 0, 10, 0"
 			                Text="{Binding SyncGatewayUri}"
                             LineBreakMode="CharacterWrap"
                             VerticalTextAlignment="Center"
                             HorizontalTextAlignment="End"
                             HorizontalOptions="EndAndExpand"
-                            Style="{DynamicResource ListItemDetailTextStyle}"
                             TextColor="{StaticResource PageTextColor}">
                         </Label>
 		            </StackLayout>
@@ -120,17 +121,17 @@
                             Padding="16, 0, 0, 0"
                             VerticalTextAlignment="Center"
 			                Text="REST API"
-                            Style="{DynamicResource SubtitleStyle}"
+					        Style="{DynamicResource CaptionStyle}"
                             TextColor="White">
 		                </Label>
                         <Label 
-                            Margin="2, 0, 16, 0"
+							FontSize="10"
+                            Margin="1, 0, 10, 0"
 			                Text="{Binding RestApiUri}"
                             LineBreakMode="CharacterWrap"
                             VerticalTextAlignment="Center"
                             HorizontalTextAlignment="End"
                             HorizontalOptions="EndAndExpand"
-                            Style="{DynamicResource ListItemDetailTextStyle}"
                             TextColor="{StaticResource PageTextColor}">
                         </Label>
 		            </StackLayout>
@@ -159,7 +160,7 @@
                             Padding="16, 0, 0, 0"
                             VerticalTextAlignment="Center"
 			                Text="Name"
-                            Style="{DynamicResource SubtitleStyle}"
+ 					        Style="{DynamicResource CaptionStyle}"
                             TextColor="White">
 		                </Label>
                         <Label 
@@ -169,7 +170,6 @@
                             VerticalTextAlignment="Center"
                             HorizontalTextAlignment="End"
                             HorizontalOptions="EndAndExpand"
-                            Style="{DynamicResource ListItemDetailTextStyle}"
                             TextColor="{StaticResource PageTextColor}">
                         </Label>
 		            </StackLayout>
@@ -184,7 +184,7 @@
                             Padding="16, 0, 0, 0"
                             VerticalTextAlignment="Center"
 			                Text="Replication Status"
-                            Style="{DynamicResource SubtitleStyle}"
+					        Style="{DynamicResource CaptionStyle}"
                             TextColor="White">
 		                </Label>
                         <Label 
@@ -194,7 +194,6 @@
                             HorizontalTextAlignment="End"
                             HorizontalOptions="EndAndExpand"
                             LineBreakMode="CharacterWrap"
-                            Style="{DynamicResource ListItemDetailTextStyle}"
                             TextColor="{StaticResource PageTextColor}">
                         </Label>
 		            </StackLayout>
@@ -209,7 +208,7 @@
 			                Padding="16, 0, 0, 0"
 			                VerticalTextAlignment="Center"
 			                Text="Indexes"
-			                Style="{DynamicResource SubtitleStyle}"
+					        Style="{DynamicResource CaptionStyle}"
 			                TextColor="White">
 		                </Label>
 		                <Label 
@@ -219,7 +218,6 @@
 			                HorizontalTextAlignment="End"
 			                HorizontalOptions="EndAndExpand"
 			                LineBreakMode="CharacterWrap"
-			                Style="{DynamicResource ListItemDetailTextStyle}"
 			                TextColor="{StaticResource PageTextColor}">
 		                </Label>
 	                </StackLayout>
@@ -234,7 +232,7 @@
 			                Padding="16, 0, 0, 0"
 			                VerticalTextAlignment="Center"
 			                Text="Auctions"
-			                Style="{DynamicResource SubtitleStyle}"
+					        Style="{DynamicResource CaptionStyle}"
 			                TextColor="White">
 		                </Label>
 		                <Label 
@@ -244,7 +242,6 @@
 			                VerticalTextAlignment="Center"
 			                HorizontalTextAlignment="End"
 			                HorizontalOptions="EndAndExpand"
-			                Style="{DynamicResource ListItemDetailTextStyle}"
 			                TextColor="{StaticResource PageTextColor}">
 		                </Label>
 	                </StackLayout>
@@ -259,7 +256,7 @@
 			                Padding="16, 0, 0, 0"
 			                VerticalTextAlignment="Center"
 			                Text="Bids"
-			                Style="{DynamicResource SubtitleStyle}"
+					        Style="{DynamicResource CaptionStyle}"
 			                TextColor="White">
 		                </Label>
 		                <Label 
@@ -269,7 +266,6 @@
 			                VerticalTextAlignment="Center"
 			                HorizontalTextAlignment="End"
 			                HorizontalOptions="EndAndExpand"
-			                Style="{DynamicResource ListItemDetailTextStyle}"
 			                TextColor="{StaticResource PageTextColor}">
 		                </Label>
 	                </StackLayout>

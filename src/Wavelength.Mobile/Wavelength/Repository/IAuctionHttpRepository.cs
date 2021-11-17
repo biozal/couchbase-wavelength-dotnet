@@ -8,6 +8,6 @@ namespace Wavelength.Repository
     public interface IAuctionHttpRepository
     {
         Task<AuctionItemsDao> GetItemsAsync(bool forceRefresh = false);
-        Task<IEnumerable<BidResult>> PostBid(Bid bid, CancellationToken token);
+        Task<IEnumerable<BidResult>> PostBidAsync(BidDto bid, CancellationToken token);
     }
 }

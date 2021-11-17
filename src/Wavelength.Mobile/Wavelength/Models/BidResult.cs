@@ -13,5 +13,7 @@ namespace Wavelength.Models
         public decimal DbExecutionTime { get; set; }
         public decimal DbElapsedTime { get; set; }
         public DateTimeOffset ApiSendDateTime { get; set; }    
+        
+        public double TotalHttpLatency { get; set; }
     }
 }

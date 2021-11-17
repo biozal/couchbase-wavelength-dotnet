@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Wavelength.ViewModels"  
              xmlns:model="clr-namespace:Wavelength.Models"  
+             xmlns:ffimageloading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              xmlns:converters="clr-namespace:Wavelength.Converters;assembly=Wavelength"
              x:Class="Wavelength.Views.ItemDetailPage"
              x:Name="AuctionItemsDetailPage"
@@ -12,40 +13,78 @@
     <ContentPage.Resources>
         <converters:DateTimeOffsetToString x:Key="DateTimeString"/>
     </ContentPage.Resources>
-    <StackLayout Spacing="10" Padding="16, 10, 16, 10" x:DataType="local:ItemDetailViewModel">
-        <Image Aspect="AspectFit" HeightRequest="120">
+    <Grid        
+	    HorizontalOptions="StartAndExpand"
+        VerticalOptions="StartAndExpand"
+	    Padding="16, 10, 16, 10">
+           <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+	<!--
+    <StackLayout 
+        HorizontalOptions="StartAndExpand"
+        VerticalOptions="StartAndExpand"
+	    Spacing="10" Padding="16, 10, 16, 10" 
+	    x:DataType="local:ItemDetailViewModel">
+        <StackLayout>
+	-->
+        <!--<Image Aspect="AspectFit" HeightRequest="160">
             <Image.Source>
-                <UriImageSource Uri="{Binding ImageUrl}" CacheValidity="14" CachingEnabled="true"></UriImageSource>   
+                <UriImageSource 
+		            Uri="{Binding ImageUrl}" 
+				    CacheValidity="14" 
+		            CachingEnabled="true">
+		        </UriImageSource>   
             </Image.Source>
-        </Image>   
+        </Image>-->  
         <Label 
+	        Grid.Row="0"
+            Margin="0, 2"
             TextColor="{StaticResource PageTextColor}"
             Text="{Binding Text}" 
             Style="{DynamicResource SubtitleStyle}" 
-            FontSize="Large"/>
-        <Label Text="{Binding DisplayStopTime}" 
-               LineBreakMode="NoWrap"
-               Style="{DynamicResource CaptionStyle}"
-               TextColor="{StaticResource PageTextColor}"
-               FontSize="Medium" />
+            FontSize="Large">
+	    </Label>
+        <Label 
+	        Grid.Row="1"
+            Margin="0, 2"
+	        Text="{Binding DisplayStopTime}" 
+            LineBreakMode="NoWrap"
+            Style="{DynamicResource CaptionStyle}"
+            TextColor="{StaticResource PageTextColor}"
+            FontSize="Medium" />
         <Button
-            Margin="0, 10, 0, 0"
+            Margin="0, 5"
+	        Grid.Row="2"
+            IsVisible="{Binding IsAuctionActive}"
             Text="Bid"
             Command="{Binding BidOnItemCommand}"
             BackgroundColor="{StaticResource CouchbaseRedBackgroundColor}"
             TextColor="White">
         </Button>
         <BoxView 
+	        Grid.Row="3"
             HeightRequest="1" 
-            Margin="4, 12, 0, 4" 
+            Margin="4, 5, 0, 2" 
             Color="{StaticResource SeparatorBackgroundColor}">
         </BoxView>
-        <Label Text="Bids"
-               LineBreakMode="NoWrap"
-               Style="{DynamicResource CaptionStyle}"
-               TextColor="{StaticResource PageTextColor}"
-               FontSize="Medium" />
+        <Label 
+	        Grid.Row="4"
+            Margin="0, 5, 0, 1" 
+	        Text="Bids"
+            LineBreakMode="NoWrap"
+            Style="{DynamicResource CaptionStyle}"
+            TextColor="{StaticResource PageTextColor}"
+            FontSize="Medium">
+	    </Label>
         <CollectionView
+            Margin="0, 2, 0, 0"
+	        Grid.Row="5"
             x:DataType="local:ItemDetailViewModel"
             x:Name="BidsCollectionView"
             ItemsSource="{Binding Items}"
@@ -58,7 +97,7 @@
                             BackgroundColor="{StaticResource CellBackgroundColor}"
                             VerticalOptions="StartAndExpand"
                             CornerRadius="12"
-                            HeightRequest="140"
+                            HeightRequest="180"
                             Margin="8, 10, 8, 10"
                             HasShadow="false">
                             <StackLayout
@@ -85,6 +124,34 @@
                                            TextColor="{StaticResource PageTextColor}"
                                            Margin="8, 0, 0, 0"
                                            FontSize="14" />
+                                </StackLayout>
+                                <BoxView 
+                                    HeightRequest="1" 
+                                    Margin="1, 4, 0, 4" 
+                                    Color="{StaticResource SeparatorBackgroundColor}">
+                                </BoxView>
+                                 <StackLayout 
+                                    Orientation="Horizontal"
+                                    VerticalOptions="StartAndExpand"
+                                    x:DataType="model:Bid">
+                                    <Label
+                                        Text="Bid Id"
+                                        LineBreakMode="NoWrap" 
+                                        HorizontalTextAlignment="Start"
+                                        VerticalTextAlignment="Center"
+                                        Style="{DynamicResource CaptionStyle}" 
+                                        TextColor="{StaticResource PageTextColor}"
+                                        FontSize="14"
+                                    />
+                                    <Label Text="{Binding BidId}" 
+                                        LineBreakMode="CharacterWrap"
+                                        VerticalTextAlignment="Center"
+                                        HorizontalTextAlignment="End"
+                                        HorizontalOptions="EndAndExpand"
+                                        Style="{DynamicResource CaptionStyle}" 
+                                        TextColor="{StaticResource PageTextColor}"
+                                        Margin="4, 0, 0, 0"
+                                        FontSize="14" />
                                 </StackLayout>
                                 <BoxView 
                                     HeightRequest="1" 
@@ -177,6 +244,24 @@
                     </StackLayout>
                 </DataTemplate>  
            </CollectionView.ItemTemplate>
+          <CollectionView.EmptyView>
+            <ContentView>
+                <StackLayout 
+		            HorizontalOptions="CenterAndExpand" 
+		            VerticalOptions="CenterAndExpand">
+                    <Label
+                        Margin="10, 25, 10, 10"
+                        FontAttributes="Bold"
+                        FontSize="18"
+                        HorizontalOptions="Fill"
+                        HorizontalTextAlignment="Center"
+                        TextColor="{StaticResource PageTextColor}"
+                        Text="No bids found at this time.  New bids should automatically appear on this screen.">
+		            </Label>
+		        </StackLayout>
+	        </ContentView>
+	    </CollectionView.EmptyView>
         </CollectionView>
-    </StackLayout>
+	</Grid>
+    <!--  </StackLayout> -->
 </ContentPage>

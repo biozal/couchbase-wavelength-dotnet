@@ -1,11 +1,14 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Couchbase.Lite;
 using Couchbase.Lite.Query;
 using Couchbase.Lite.Sync;
 using Wavelength.Constants;
 using Wavelength.Models;
+using Microsoft.Extensions.DependencyInjection;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace Wavelength.Services
 {
@@ -22,7 +25,7 @@ namespace Wavelength.Services
         private readonly string _directoryPath;
         public string DatabaseDirectoryPath => _directoryPath;
         
-	    private readonly string _deviceId;
+	    private string _deviceId;
 	    public string DeviceId => _deviceId;
 	    
 		public string RestApiUri { get; private set; }
@@ -39,7 +42,20 @@ namespace Wavelength.Services
             _connectivityService = connectivityService;
             _databaseName = "Auctions";
             _directoryPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            _deviceId = Xamarin.Essentials.Preferences.Get(Constants.Preferences.DeviceIdKey, Guid.NewGuid().ToString());
+			if (Xamarin.Essentials.Preferences.ContainsKey(Constants.Preferences.DeviceIdKey))
+			{
+				_deviceId = Xamarin.Essentials.Preferences.Get(Constants.Preferences.DeviceIdKey, "");
+				if (_deviceId == string.Empty) 
+				{
+					_deviceId = Guid.NewGuid().ToString();
+					Xamarin.Essentials.Preferences.Set(Constants.Preferences.DeviceIdKey, _deviceId);
+				}
+			}
+			else 
+			{
+				_deviceId = Guid.NewGuid().ToString();
+				Xamarin.Essentials.Preferences.Set(Constants.Preferences.DeviceIdKey, _deviceId);
+			}
             IsDatabaseInitialized = false;
         }
 
@@ -101,20 +117,28 @@ namespace Wavelength.Services
 		        if (!indexes.Contains(Indexes.DocumentType))
 		        {
 					AuctionDatabase.CreateIndex(
-				        Constants.Indexes.DocumentType,
+				        Indexes.DocumentType,
 						IndexBuilder.ValueIndex(ValueIndexItem.Expression(Expression.Property(ExpressionProperties.DocumentType)))
 					);
 		        }
 		        if (!indexes.Contains(Indexes.AuctionItemBids))
 		        {
-					var auctionBidsIndex = IndexBuilder.ValueIndex(
+					var index = IndexBuilder.ValueIndex(
 						ValueIndexItem.Expression(Expression.Property(ExpressionProperties.DocumentType)),
 						ValueIndexItem.Expression(Expression.Property(ExpressionProperties.AuctionId))
 					);
-					AuctionDatabase.CreateIndex(Indexes.AuctionItemBids, auctionBidsIndex);
+					AuctionDatabase.CreateIndex(Indexes.AuctionItemBids, index);
+				}
+				if (!indexes.Contains(Indexes.DocumentTypeIsActive))
+				{
+					var index = IndexBuilder.ValueIndex(
+						ValueIndexItem.Expression(Expression.Property(ExpressionProperties.DocumentType)),
+						ValueIndexItem.Expression(Expression.Property(ExpressionProperties.IsActive))
+					);
+					AuctionDatabase.CreateIndex(Indexes.DocumentTypeIsActive, index);
 				}
 
-		        IndexCount = AuctionDatabase.GetIndexes().Count.ToString();
+				IndexCount = AuctionDatabase.GetIndexes().Count.ToString();
 	        }
 	        await Task.CompletedTask;
         }
@@ -126,78 +150,105 @@ namespace Wavelength.Services
                 await CalculateSyncGatewayEndpoint();
                 var urlEndpoint = new URLEndpoint(new Uri(SyncGatewayUri));
 
-                var authenticator = new  BasicAuthenticator(Constants.RestUri.SyncGatewayUsername, Constants.RestUri.SyncGatewayPassword);
-                var replicationConfig = new ReplicatorConfiguration(AuctionDatabase, urlEndpoint);
-                replicationConfig.ReplicatorType = ReplicatorType.Pull;
-                replicationConfig.Continuous = true;
-                replicationConfig.Authenticator = authenticator;
+				try
+				{
+					var authenticator = new BasicAuthenticator(RestUri.SyncGatewayUsername, RestUri.SyncGatewayPassword);
+					var replicationConfig = new ReplicatorConfiguration(AuctionDatabase, urlEndpoint);
+					replicationConfig.ReplicatorType = ReplicatorType.Pull;
+					replicationConfig.Continuous = true;
+					replicationConfig.Heartbeat = TimeSpan.FromSeconds(30);
+					replicationConfig.EnableAutoPurge = true;
+					replicationConfig.Authenticator = authenticator;
 
-                _auctionReplicator = new Replicator(replicationConfig);
-          
-                _replicatonChangeToken = _auctionReplicator.AddChangeListener((o, e) =>
-                {
-	                if (e.Status.Error != null)
-	                {
-		                Messaging.Instance.Publish(Constants.Messages.ReplicationError, e.Status.Error);
-	                }
+					//need to hack in the pinned certificate stuff to fix issue with Android
+					//this is probably more secure than iOS but a pain in the butt none the less
+					//and yes I should do this in iOS too but that is just going to add regression onto
+					//something that already works.  LABEAAA 11/16/2021
+					if (Xamarin.Forms.Device.RuntimePlatform == Device.Android)
+					{
+						var pcs = Startup.ServiceProvider.GetService<IPinnedCertificateService>();
+						var bytes = pcs.GetCertificateFromAssets();
+						replicationConfig.PinnedServerCertificate = new X509Certificate2(bytes);
+					}
 
-	                if (e.Status.Progress.Completed > 0 || e.Status.Progress.Total > 0)
-	                {
-		                Messaging.Instance.Publish(Constants.Messages.ReplicationProgressUpdate, new ProgressStatus
-									{
-										Total = e.Status.Progress.Total, 
-										Completed = e.Status.Progress.Completed
-									});
-	                }
-	                switch (e.Status.Activity)
-	                {
-						case ReplicatorActivityLevel.Busy:
-							LastReplicatorStatus = Messages.ReplicationStatus.Busy;
-							Messaging.Instance.Publish(Constants.Messages.ReplicationChangeStatus, Constants.Messages.ReplicationStatus.Busy);
-							break;
-						case ReplicatorActivityLevel.Connecting:
-							LastReplicatorStatus = Messages.ReplicationStatus.Connecting;
-							Messaging.Instance.Publish(Constants.Messages.ReplicationChangeStatus, Constants.Messages.ReplicationStatus.Connecting);
-							break;
-						case ReplicatorActivityLevel.Offline:
-							LastReplicatorStatus = Messages.ReplicationStatus.Offline;
-							Messaging.Instance.Publish(Constants.Messages.ReplicationChangeStatus, Constants.Messages.ReplicationStatus.Offline);
-							break;
-						case ReplicatorActivityLevel.Stopped:
-							LastReplicatorStatus = Messages.ReplicationStatus.Stopped;
-							Messaging.Instance.Publish(Constants.Messages.ReplicationChangeStatus, Constants.Messages.ReplicationStatus.Stopped);
-							break;
-						default:
-							LastReplicatorStatus = Messages.ReplicationStatus.Idle;
-							Messaging.Instance.Publish(Constants.Messages.ReplicationChangeStatus, Constants.Messages.ReplicationStatus.Idle);
-							break;
-	                }     
-                });
-                _auctionReplicator.Start();
+					_auctionReplicator = new Replicator(replicationConfig);
+
+					_replicatonChangeToken = _auctionReplicator.AddChangeListener((o, e) =>
+					{
+						if (e.Status.Error != null)
+						{
+							Console.WriteLine($"**Replication ERROR Message: {e.Status.Error.Message} StackTrace: {e.Status.Error.StackTrace}");
+
+							Messaging.Instance.Publish(Messages.ReplicationError, e.Status.Error);
+						}
+
+						if (e.Status.Progress.Completed > 0 || e.Status.Progress.Total > 0)
+						{
+							Messaging.Instance.Publish(Messages.ReplicationProgressUpdate, new ProgressStatus
+							{
+								Total = e.Status.Progress.Total,
+								Completed = e.Status.Progress.Completed
+							});
+						}
+						switch (e.Status.Activity)
+						{
+							case ReplicatorActivityLevel.Busy:
+								LastReplicatorStatus = Messages.ReplicationStatus.Busy;
+								Messaging.Instance.Publish(Messages.ReplicationChangeStatus, Messages.ReplicationStatus.Busy);
+								break;
+							case ReplicatorActivityLevel.Connecting:
+								LastReplicatorStatus = Messages.ReplicationStatus.Connecting;
+								Messaging.Instance.Publish(Messages.ReplicationChangeStatus, Messages.ReplicationStatus.Connecting);
+								break;
+							case ReplicatorActivityLevel.Offline:
+								LastReplicatorStatus = Messages.ReplicationStatus.Offline;
+								Messaging.Instance.Publish(Messages.ReplicationChangeStatus, Messages.ReplicationStatus.Offline);
+								break;
+							case ReplicatorActivityLevel.Stopped:
+								LastReplicatorStatus = Messages.ReplicationStatus.Stopped;
+								Messaging.Instance.Publish(Messages.ReplicationChangeStatus, Messages.ReplicationStatus.Stopped);
+								break;
+							default:
+								LastReplicatorStatus = Messages.ReplicationStatus.Idle;
+								Messaging.Instance.Publish(Messages.ReplicationChangeStatus, Messages.ReplicationStatus.Idle);
+								break;
+						}
+					});
+					_auctionReplicator.Start();
+                }
+				catch (Exception ex) 
+				{
+					Console.WriteLine($"Error - no replication, *sigh*  Future Dev please fix me:  {ex.Message}");
+				}
             }
 	    }
 
         private async Task CalculateSyncGatewayEndpoint() 
 	    {
-            var isWavelengthApiAvailable = await _connectivityService.IsRemoteReachable(
-		                                    Constants.RestUri.WavelengthServerBaseUrl, 
-					                        Constants.RestUri.WavelengthServerPort);
+			DatacenterLocation = Labels.DatacenterLocationCloud;
+			SyncGatewayUri = $@"{RestUri.CloudSyncGatewayProtocol}://{RestUri.CloudSyncGatewayUrl}:{RestUri.CloudSyncGatewayPort}/{RestUri.CloudSyncGatewayEndpoint}";
+			RestApiUri = $@"{RestUri.CloudServerProtocol}://{RestUri.CloudServerBaseUrl}:{RestUri.CloudServerPort}";
+			try
+			{
+				var isWavelengthApiAvailable = await _connectivityService.IsRemoteReachable(
+												RestUri.WavelengthServerBaseUrl,
+												RestUri.WavelengthServerPort);
 
-            var isWavelengthSyncGatewayAvailable = await _connectivityService.IsRemoteReachable(
-		                                    Constants.RestUri.WavelengthSyncGatewayUrl, 
-					                        Constants.RestUri.WavelengthSyncGatewayPort);
+				var isWavelengthSyncGatewayAvailable = await _connectivityService.IsRemoteReachable(
+												RestUri.WavelengthSyncGatewayUrl,
+												RestUri.WavelengthSyncGatewayPort);
 
-            if (isWavelengthApiAvailable && isWavelengthSyncGatewayAvailable) 
-	        {
-		        DatacenterLocation = Constants.Labels.DatacenterLocationWavelength;
-		        SyncGatewayUri = $@"{Constants.RestUri.WavelengthSyncGatewayProtocol}://{Constants.RestUri.WavelengthSyncGatewayUrl}:{Constants.RestUri.WavelengthSyncGatewayPort}/{Constants.RestUri.WavelengthSyncGatewayEndpoint}";
-		        RestApiUri = $@"{Constants.RestUri.WavelengthServerProtocol}://{Constants.RestUri.WavelengthServerBaseUrl}:{Constants.RestUri.WavelengthServerPort}";
-	        } else 
-	        { 
-		        DatacenterLocation = Constants.Labels.DatacenterLocationCloud;
-		        SyncGatewayUri = $@"{Constants.RestUri.CloudSyncGatewayProtocol}://{Constants.RestUri.CloudSyncGatewayUrl}:{Constants.RestUri.CloudSyncGatewayPort}/{Constants.RestUri.CloudSyncGatewayEndpoint}";
-		        RestApiUri = $@"{Constants.RestUri.CloudServerProtocol}://{Constants.RestUri.CloudServerBaseUrl}:{Constants.RestUri.CloudServerPort}";
-	        }
+				if (isWavelengthApiAvailable && isWavelengthSyncGatewayAvailable)
+				{
+					DatacenterLocation = Labels.DatacenterLocationWavelength;
+					SyncGatewayUri = $@"{RestUri.WavelengthSyncGatewayProtocol}://{RestUri.WavelengthSyncGatewayUrl}:{RestUri.WavelengthSyncGatewayPort}/{RestUri.WavelengthSyncGatewayEndpoint}";
+					RestApiUri = $@"{RestUri.WavelengthServerProtocol}://{RestUri.WavelengthServerBaseUrl}:{RestUri.WavelengthServerPort}";
+				}
+			}
+			catch (Exception ex) 
+			{
+				Console.WriteLine($"Error: {ex.Message}");
+			}
 	    }
     }
 }
