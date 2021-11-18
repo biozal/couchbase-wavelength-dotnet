@@ -46,11 +46,10 @@ namespace Wavelength.Droid
         
         private void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
-#if (DEBUG)
-	        services.AddSingleton<IHttpClientHandlerFactory, HttpClientHandlerAndroidDebugFactory>();
+	        services.AddSingleton<IHttpClientHandlerFactory, HttpClientHandlerAndroidFactory>();
 	        services.AddSingleton<Wavelength.Services.IHttpClientFactory, HttpClientFactory>();
 	        services.AddSingleton<IAuctionHttpRepository, AuctionHttpRepository>();
-#endif
+
 	        var pinnedCertService = new PinnedCertificateService(this.Assets);
 	        services.AddSingleton<IPinnedCertificateService>(pinnedCertService);
 	        services.AddSingleton<IConnectivityService, ConnectivityService>();

@@ -42,6 +42,9 @@
     <WarningLevel>4</WarningLevel>
     <AndroidManagedSymbols>true</AndroidManagedSymbols>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <AndroidPackageFormat>aab</AndroidPackageFormat>
+<AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+<AndroidLinkTool>r8</AndroidLinkTool>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -73,7 +76,7 @@
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Network\HttpClientHandlerAndroidDebugFactory.cs" />
+    <Compile Include="Network\HttpClientHandlerAndroidFactory.cs" />
     <Compile Include="Services\ConnectivityService.cs" />
     <Compile Include="Services\PinnedCertificateService.cs" />
   </ItemGroup>
