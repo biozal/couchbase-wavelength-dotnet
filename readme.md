@@ -1,4 +1,4 @@
-# Verizon Wavelength with Couchbase Demo  
+# Wavelength with Couchbase Demo  
 
 ## Development Requirements
 
