@@ -1,32 +1,38 @@
-﻿using System;
-using System.ComponentModel;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Wavelength.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-
-using Wavelength.Models;
-using Wavelength.Views;
-using Wavelength.ViewModels;
 
 namespace Wavelength.Views
 {
     public partial class ItemsPage : ContentPage
     {
-        ItemsViewModel _viewModel;
+        private readonly ItemsViewModel _viewModel;
 
         public ItemsPage()
         {
-            InitializeComponent();
-            BindingContext = _viewModel = new ItemsViewModel();
+            try
+            {
+                InitializeComponent();
+                _viewModel = Startup.ServiceProvider.GetService<ItemsViewModel>();
+                BindingContext = _viewModel;
+            }
+            catch (System.Exception ex) 
+	        {
+                System.Console.WriteLine($"{ex.Message} {ex.StackTrace}");
+	        }
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
             _viewModel.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _viewModel.OnDisappearing();
+            
         }
     }
 }

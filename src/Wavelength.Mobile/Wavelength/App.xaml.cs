@@ -1,6 +1,13 @@
-﻿using Xamarin.Forms;
+﻿using System.Reflection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Xamarin.Forms;
 using Wavelength.Services;
 using Wavelength.Models;
+using Wavelength.Repository;
+using Xamarin.Essentials;
+using Microsoft.Extensions.DependencyInjection;
+using Wavelength.ViewModels;
 
 namespace Wavelength
 {
@@ -12,14 +19,14 @@ namespace Wavelength
             MainPage = new AppShell();
         }
 
-        public void RegisterServices()
+        public void RegisterServices(HostBuilderContext context, IServiceCollection services)
         {
-#if DEBUG
-            //used for dev debugging
+            services.AddSingleton<ICBLiteDatabaseService, CBLiteDatabaseService>();
+            services.AddSingleton<ICBLiteAuctionRepository, CBLiteAuctionRepository>();
 
-#else
-            DependencyService.Register<IHttpClientHandlerFactory, HttpClientHandlerFactory>();
-#endif
+            //load view models
+            services.AddSingleton<ItemsViewModel>();
+            services.AddTransient<InformationViewModel>();
         }
 
         protected override void OnStart()

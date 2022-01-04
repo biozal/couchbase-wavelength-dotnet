@@ -6,6 +6,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+<<<<<<< HEAD
+=======
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Cloud' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Wavelength' " />
+>>>>>>> api-bid
   <ItemGroup>
     <None Remove="MediatR" />
     <None Remove="MediatR.Extensions.Microsoft.DependencyInjection" />

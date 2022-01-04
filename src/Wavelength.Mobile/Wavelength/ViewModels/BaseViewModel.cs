@@ -12,6 +12,10 @@ namespace Wavelength.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
+        private WeakReference<ContentPage> _page;
+        public ContentPage Page => _page.TryGetTarget(out ContentPage target) ? target : null;
+        public void SetWeakPage(ContentPage page) => _page = new WeakReference<ContentPage>(page);
+        
         bool isBusy = false;
         public bool IsBusy
         {

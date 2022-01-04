@@ -2,6 +2,8 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:Wavelength.Views"
+       xmlns:controls="clr-namespace:Wavelength.Controls"
+       xmlns:fontAwesome="clr-namespace:Wavelength.Controls"
        x:Class="Wavelength.AppShell"
        Title="Wavelength"
        FlyoutBackgroundColor = "{StaticResource Primary}" >
@@ -79,10 +81,14 @@
         FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
-    <FlyoutItem Title="Current Auctions" Icon="icon_feed.png">
+    <FlyoutItem Title="Auctions" Icon="{x:Static fontAwesome:FontAwesomeIcons.Home}">
         <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="About Wavelength" Icon="icon_about.png">
+    <FlyoutItem Title="Settings" Icon="{x:Static fontAwesome:FontAwesomeIcons.Cogs}">
+        <ShellContent Route="InformationPage" ContentTemplate="{DataTemplate local:InformationPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="About Couchbid" Icon="{x:Static fontAwesome:FontAwesomeIcons.InfoCircle}">
         <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}" />
     </FlyoutItem>
     
@@ -127,7 +133,92 @@
             </ContentView>
         </DataTemplate>
     </Shell.ItemTemplate>
+    -->
+    <!--  Modified to show icon fonts, this should be built in but it's not, 
+            used default ShellItems template found from link above  -->
+    <Shell.ItemTemplate>
+     <DataTemplate>
+         <Grid
+            HeightRequest="{x:OnPlatform Android=50}"
+            ColumnSpacing="{x:OnPlatform UWP=0}"
+            RowSpacing="{x:OnPlatform UWP=0, iOS=40, Android=40}">
+             <VisualStateManager.VisualStateGroups>
+                 <VisualStateGroupList>
+                     <VisualStateGroup 
+			            x:Name="CommonStates">
+                         <VisualState 
+			                x:Name="Normal">
+                             <VisualState.Setters>
+                                 <Setter 
+				                    Property="BackgroundColor" 
+				                    Value="{StaticResource Primary}" />
+                                     <Setter 
+					                    TargetName="FlyoutItemLabel" 
+					                    Property="Label.TextColor" 
+					                    Value="{StaticResource PageTextColor}" />
+                             </VisualState.Setters>
+                         </VisualState>
+                         <VisualState 
+			                    x:Name="Selected">
+                             <VisualState.Setters>
+                                 <Setter 
+				                    TargetName="FlyoutItemLabel" 
+				                    Property="Label.TextColor" 
+				                    Value="White" />
+                             </VisualState.Setters>
+                         </VisualState>
+                     </VisualStateGroup>
+                 </VisualStateGroupList>
+             </VisualStateManager.VisualStateGroups>
+             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{x:OnPlatform Android=54, iOS=50, UWP=Auto}" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+             <Image 
+                VerticalOptions="Center"
+		        Margin="0, 16"
+                HorizontalOptions="{x:OnPlatform Default=Center, UWP=Start}"
+                HeightRequest="{x:OnPlatform Android=24, iOS=22, UWP=16}"
+                WidthRequest="{x:OnPlatform Android=24, iOS=22, UWP=16}">
+                <Image.Source>
+                    <FontImageSource 
+	                    Size="16"	
+			            FontFamily="FontAwesome5Solid"
+                        Color="{Binding Source={x:Reference FlyoutItemLabel} ,Path=TextColor}"
+                        Glyph="{Binding Icon}"/>
+                    </Image.Source>
+             </Image>
+             <Label 
+		        x:Name="FlyoutItemLabel"
+                Grid.Column="1"        
+                Text="{Binding Title}"
+                FontSize="{x:OnPlatform Android=18, iOS=Medium}"
+                HorizontalOptions="{x:OnPlatform UWP=Start}"
+                HorizontalTextAlignment="{x:OnPlatform UWP=Start}"
+                FontAttributes="{x:OnPlatform iOS=Bold}"
+                VerticalTextAlignment="Center">
+               <Label.Margin>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <OnPlatform.Platforms>
+                            <On Platform="Android"
+                                Value="20, 0, 0, 0" />
+                        </OnPlatform.Platforms>
+                    </OnPlatform>
+                </Label.Margin>
+                <Label.FontFamily>
+                    <OnPlatform x:TypeArguments="x:String">
+                        <OnPlatform.Platforms>
+                            <On Platform="Android"
+                                Value="sans-serif-medium" />
+                        </OnPlatform.Platforms>
+                    </OnPlatform>
+                </Label.FontFamily>
+		    </Label>
+         </Grid>
+     </DataTemplate>
+    </Shell.ItemTemplate> 
 
+    <!--
     // MenuItemTemplate is for MenuItems as displayed in a Flyout
     // https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#define-menuitem-appearance
     <Shell.MenuItemTemplate>

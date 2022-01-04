@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -12,54 +13,67 @@ using Newtonsoft.Json;
 
 namespace Wavelength.ViewModels
 {
-    public class ItemsViewModel : BaseViewModel
+    public class ItemsViewModel 
+	    : BaseViewModel, IViewModel
     {
-        private readonly IAuctionItemRepository _auctionItemRepository; 
+        private readonly IAuctionHttpRepository _auctionHttpRepository;
+        private readonly ICBLiteAuctionRepository _auctionRepository;
 
         private AuctionItem _selectedItem;
-
-        public ObservableCollection<AuctionItem> Items { get; }
-        public Command LoadItemsCommand { get; }
+        
+        public Command<IEnumerable<AuctionItem>> AuctionItemsUpdatedCommand { get; }
+        public ObservableCollection<AuctionItem> Items { get; private set; }
         public Command<AuctionItem> ItemTapped { get; }
 
-        public ItemsViewModel()
+        public ItemsViewModel(ICBLiteAuctionRepository auctionRepository)
         {
-            Title = "Wavelength Auctions";
-
-            _auctionItemRepository = DependencyService.Get<IAuctionItemRepository>();
+            Title = "Auctions";
+            _auctionRepository = auctionRepository;
+            _auctionHttpRepository = DependencyService.Get<IAuctionHttpRepository>();
             Items = new ObservableCollection<AuctionItem>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
-
+            
+            //setup live query 
+            AuctionItemsUpdatedCommand = new Command<IEnumerable<AuctionItem>>(OnAuctionItemsUpdate);
+            
+            //handle navigation when item is selected
             ItemTapped = new Command<AuctionItem>(OnItemSelected);
         }
 
-        async Task ExecuteLoadItemsCommand()
+        private void OnAuctionItemsUpdate(IEnumerable<AuctionItem> auctionItems)
         {
-            IsBusy = true;
-
             try
             {
-                Items.Clear();
-                var results  = await _auctionItemRepository.GetItemsAsync(true);
-                foreach (var item in results.Items)
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    Items.Add(item);
-                }
+                    IsBusy = true;
+                    Items.Clear();
+                    if (Items.Count > 0)
+                    {
+                        Items.Clear();
+                    }
+                    //add items
+                    foreach (var item in auctionItems)
+                    {
+                        Items.Add(item);
+                    }
+                    IsBusy = false;
+                });
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            catch (Exception ex) 
+	        {
+                Console.WriteLine($"{ex.Message}");
+	        }
         }
-
+        
         public void OnAppearing()
         {
-            IsBusy = true;
             SelectedItem = null;
+            _auctionRepository.RegisterAuctionLiveQuery(AuctionItemsUpdatedCommand);
+        }
+
+        public void OnDisappearing()
+        {
+            _auctionRepository.DeRegisterAuctionLiveQuery();    
         }
 
         public AuctionItem SelectedItem

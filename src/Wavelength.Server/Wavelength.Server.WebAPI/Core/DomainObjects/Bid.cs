@@ -1,4 +1,5 @@
 ﻿using System;
+using Wavelength.Core.DTO;
 
 namespace Wavelength.Core.DomainObjects
 {
@@ -10,6 +11,10 @@ namespace Wavelength.Core.DomainObjects
         public Guid BidId { get; set; }
         public Guid AuctionId { get; set; }
         public DateTimeOffset Received { get; set; }
+<<<<<<< HEAD
+=======
+        
+>>>>>>> api-bid
         public DateTimeOffset Sent { get; set; }
         public string LocationName { get; set; } = string.Empty;
 
