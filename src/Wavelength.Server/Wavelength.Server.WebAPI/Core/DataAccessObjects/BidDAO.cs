@@ -17,10 +17,6 @@ namespace Wavelength.Core.DataAccessObjects
         public Guid AuctionId { get; set; }
         public string LocationName { get; set; } = string.Empty;
         public DateTimeOffset Received { get; set; }
-<<<<<<< HEAD
-=======
-        
->>>>>>> api-bid
         public DateTimeOffset Sent { get; set; }
         public Metrics PerformanceMetrics { get; set; } 
     }

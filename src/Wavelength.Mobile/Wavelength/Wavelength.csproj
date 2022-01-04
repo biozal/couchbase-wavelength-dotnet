@@ -3,11 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
-<<<<<<< HEAD
-=======
     <Configurations>Debug;Release</Configurations>
     <LangVersion>9.0</LangVersion>
->>>>>>> api-bid
   </PropertyGroup>
 
   <ItemGroup>
