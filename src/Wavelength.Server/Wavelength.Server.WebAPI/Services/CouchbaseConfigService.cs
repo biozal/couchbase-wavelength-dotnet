@@ -32,6 +32,7 @@ namespace Wavelength.Server.WebAPI.Services
             Config.Username = _configuration.GetValue<string>("CBUsername");
             Config.UseSsl = _configuration.GetValue<bool>("CBUseSsl");
             Config.ClosingCode = _configuration.GetValue<string>("CBClosingCode");
+            Config.DurabilityPersistToMajority = _configuration.GetValue<bool>("CBDurabilityPersistToMajority");
         }
     }
 }

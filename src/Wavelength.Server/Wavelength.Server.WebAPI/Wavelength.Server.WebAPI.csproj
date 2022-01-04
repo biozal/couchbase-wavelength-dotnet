@@ -22,8 +22,6 @@
     <None Remove="Couchbase.Lite.Enterprise" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\" />
-    <Folder Include="Features\Auctions\" />
     <Folder Include="Constants\" />
     <Folder Include="Repositories\" />
     <Folder Include="Providers\" />

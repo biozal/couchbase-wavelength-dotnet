@@ -11,5 +11,6 @@ namespace Wavelength.Core.DataAccessObjects
 		public string CollectionName { get; set; } = string.Empty;
 		public string BucketName { get; set; } = string.Empty;
 		public string SyncGatewayUri { get; set; } = string.Empty;
+		public bool IsDurabilityPersistToMajority { get; set; } = false;
 	}
 }

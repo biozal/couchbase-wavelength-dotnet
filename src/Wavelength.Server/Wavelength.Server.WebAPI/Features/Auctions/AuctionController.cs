@@ -56,44 +56,45 @@ namespace Wavelength.Server.WebAPI.Features.Auctions
 		}
 
 		[HttpPost]
-		[Route("[action]")]
-		public async Task<IActionResult> Bid(
-			[FromBody] Auction.CreateBidCommand.RequestCommand requestCommand)
-		{
-			var stopWatch = new Stopwatch();
-			try
-			{
-				stopWatch.Start();
-				var response = await _mediator.Send(requestCommand);
+		public async Task<IActionResult> Post(
+			[FromBody] CreateAuctionCommand.RequestCommand command)
+        {
+            try
+            {
+				var response = await _mediator.Send(command);
 				if (response is not null)
                 {
-					stopWatch.Stop();
-					response.PerformanceMetrics.ApiLatency = stopWatch.Elapsed.TotalMilliseconds;
-					response.PerformanceMetrics.ApiSendDateTime = DateTimeOffset.UtcNow;
-					this.HttpContext.Response.Headers[ServerTimingHeaderName] = string.Join(",", response.PerformanceMetrics.ToHeaders());
-					return this.Ok(response);
+					return Created($"/api/v1/Auction/{response.Id}", response);
                 }
-				stopWatch.Stop();
+				return Problem("Couldn't create item");
+            }
+            catch (Exception ex)
+            {
+				return DealWithErrors(ex);
+            }
+        }
+
+		[HttpPut]
+		[Route("[action]")]
+		public async Task<IActionResult> Deactivate(
+		  [FromBody] DeactivateAuctionCommand.RequestCommand requestCommand)
+		{
+			try
+			{
+				var response = await _mediator.Send(requestCommand);
+				if (response) 
+				{
+					return this.Ok(response);
+				}
 				return this.Problem();
 			}
-			catch (AuctionEndedException)
-			{
-				return this.ValidationProblem();
-			}
-			catch (Exception ex) 
-				when (ex is DocumentNotFoundException || ex is AuctionNotFoundException) 
-            {
-				stopWatch.Stop();
-				return this.NotFound();
-            }
 			catch (Exception ex)
 			{
-				stopWatch.Stop();
 				return DealWithErrors(ex);
 			}
 		}
 
-		[HttpPost]
+		[HttpPut]
 		[Route("[action]")]
 		public async Task<IActionResult> Close(
 				  [FromBody] CloseAuctionsCommand.RequestCommand requestCommand)
@@ -112,6 +113,64 @@ namespace Wavelength.Server.WebAPI.Features.Auctions
 				return DealWithErrors(ex);
             }
 		}
+
+		[HttpDelete]
+		public async Task<IActionResult> Delete(
+			[FromBody] DeleteAuctionCommand.RequestCommand requestCommand)
+		{
+			try
+			{
+				var response = await _mediator.Send(requestCommand);
+				if (response)
+				{
+					return this.Ok(response);
+				}
+				return this.Problem();
+			}
+			catch (Exception ex)
+			{
+				return DealWithErrors(ex);
+			}
+		}
+
+		[HttpPost]
+		[Route("[action]")]
+		public async Task<IActionResult> Bid(
+			[FromBody] Auction.CreateBidCommand.RequestCommand requestCommand)
+		{
+			var stopWatch = new Stopwatch();
+			try
+			{
+				stopWatch.Start();
+				var response = await _mediator.Send(requestCommand);
+				if (response is not null)
+				{
+					stopWatch.Stop();
+					response.PerformanceMetrics.ApiLatency = stopWatch.Elapsed.TotalMilliseconds;
+					response.PerformanceMetrics.ApiSendDateTime = DateTimeOffset.UtcNow;
+					this.HttpContext.Response.Headers[ServerTimingHeaderName] = string.Join(",", response.PerformanceMetrics.ToHeaders());
+					return this.Ok(response);
+				}
+				stopWatch.Stop();
+				return this.Problem();
+			}
+			catch (AuctionEndedException)
+			{
+				return this.ValidationProblem();
+			}
+			catch (Exception ex)
+				when (ex is DocumentNotFoundException || ex is AuctionNotFoundException)
+			{
+				stopWatch.Stop();
+				return this.NotFound();
+			}
+			catch (Exception ex)
+			{
+				stopWatch.Stop();
+				return DealWithErrors(ex);
+			}
+		}
+
 
 		private IActionResult DealWithErrors(Exception ex) 
 		{
