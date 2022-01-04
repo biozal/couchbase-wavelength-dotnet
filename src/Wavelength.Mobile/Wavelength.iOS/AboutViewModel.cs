@@ -12,14 +12,14 @@ namespace Wavelength.ViewModels
         {
             get => _aboutDescriptionIntro;
             set => SetProperty(ref _aboutDescriptionIntro, value);
-        }
+	    }
 
         private string _aboutDescriptionDetails;
         public string AboutDescriptionDetails
         {
             get => _aboutDescriptionDetails;
             set => SetProperty(ref _aboutDescriptionDetails, value);
-        }
+	    }
 
         private string _aboutDescriptionDisclaimer;
         public string AboutDescriptionDisclaimer
@@ -33,7 +33,7 @@ namespace Wavelength.ViewModels
         {
             get => _aboutCouchbaseLite;
             set => SetProperty(ref _aboutCouchbaseLite, value);
-        }
+	    }
 
         public ICommand OpenVerizonWebCommand { get; }
         public ICommand OpenCouchbaseWebCommand { get; }
@@ -50,15 +50,15 @@ namespace Wavelength.ViewModels
             OpenAWSWebCommand = new Command(async () => await Browser.OpenAsync("https://aws.amazon.com/wavelength/"));
         }
 
-        private void SetFields()
-        {
+        private void SetFields() 
+	    {
             System.Text.StringBuilder sb = new System.Text.StringBuilder("Couchbid is a demo app implementation of Couchbase Lite, Sync Gateway, and Couchbase Server");
             sb.Append(" in AWS Wavelength using Verizon 5G Edge.");
             AboutDescriptionIntro = sb.ToString();
 
             sb.Clear();
 
-            sb.Append("This app shows items in a fictitious auction.  ");
+		    sb.Append("This app shows items in a fictitious auction.  ");
             sb.Append("The winner is cacluated based on who bids with the lowest latency to the Post Bid API.  Users can bid as many times as they like ");
             sb.Append("before the auction expires.  Once the auction expires, a winner is picked and displayed on that device only.");
             AboutDescriptionDetails = sb.ToString();
@@ -73,8 +73,8 @@ namespace Wavelength.ViewModels
             sb.Append("Couchbase Mobile is the complete NoSQL database solution for all data storage, access, sync and security across the entire application stack.  ");
             AboutCouchbaseLite = sb.ToString();
 
-        }
+        } 
 
-
+	    
     }
 }

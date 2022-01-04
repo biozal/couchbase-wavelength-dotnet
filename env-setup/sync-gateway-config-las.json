@@ -32,7 +32,7 @@
 		"wavelength": {
 			"import_docs": true,
 		  	"bucket":"wavelength",
-		  	"server": "http://172.31.102.24:8091",
+		  	"server": "http://127.0.0.1:8091",
 		  	"enable_shared_bucket_access":true,
 		  	"delta_sync": {
 				"enabled":false

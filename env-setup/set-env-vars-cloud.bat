@@ -11,4 +11,4 @@ setx cbsettings_CBSyncGatewayUri "ws://sync-gateway-wavelength:4984/wavelength"
 setx cbsettings_CBSyncGatewayUsername "demo"
 setx cbsettings_CBSyncGatewayPassword "password"
 setx cbsettings_CBUseSsl false 
-setx cbsettings_CBClosingCode "uuddlrlrbaba.P1"
+setx cbsettings_CBClosingCode "closingCode"

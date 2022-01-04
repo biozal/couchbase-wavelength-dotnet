@@ -41,6 +41,7 @@ namespace Wavelength.iOS
 
         private void ConfigureServices(HostBuilderContext context, IServiceCollection services)
         {
+            services.AddSingleton<IConnectivityService, ConnectivityService>();
             services.AddSingleton<IHttpClientHandlerFactory, HttpClientHandlerIOSFactory>();
             services.AddSingleton<IHttpClientFactory, HttpClientFactory>();
         }
